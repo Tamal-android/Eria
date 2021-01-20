@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/_20sdp"
+        android:fitsSystemWindows="true">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10sdp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_map_pin">
+
+            </androidx.appcompat.widget.AppCompatImageView>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:fontFamily="@font/roboto_medium"
+                android:padding="@dimen/_8sdp"
+                android:layout_gravity="center"
+                android:text="New York City"
+                app:layout_constraintLeft_toRightOf="@+id/iv_location"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/black_text_color"
+                android:textSize="@dimen/_14ssp"
+                />
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_user_image"
+            android:foregroundGravity="right"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/user"
+            android:padding="@dimen/_10sdp"
+            app:layout_constraintRight_toLeftOf="@+id/iv_cart_image"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/app_name"
+            />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_cart_image"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:src="@drawable/ic_shopping_cart"
+                android:padding="@dimen/_10sdp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/app_name"
+                />
+        <RelativeLayout
+            android:id="@+id/rl_search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            app:layout_constraintTop_toBottomOf="@+id/iv_location"
+            android:background="@drawable/bg_ash_background"
+            android:layout_margin="@dimen/_10sdp"
+            android:padding="@dimen/_10sdp">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_rectangle_search"
+                android:layout_alignParentRight="true"
+               >
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_search_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_search"
+                    android:layout_centerInParent="true"
+                    android:contentDescription="@string/app_name"
+                    />
+            </RelativeLayout>
+
+        </RelativeLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/banner_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_200sdp"
+            android:src="@drawable/banner"
+            android:layout_marginLeft="@dimen/_10sdp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_centerInParent="true"
+            app:layout_constraintTop_toBottomOf="@+id/rl_search"
+            android:contentDescription="@string/app_name"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_top_picks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:fontFamily="@font/roboto_medium"
+            android:paddingLeft="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:text="Top Picks For You"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/banner_image"
+            android:textColor="@color/black_text_color"
+            android:textSize="@dimen/_12ssp"
+            />
+        <!--Recycler View widget-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_top"
+            android:scrollbars="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:layout_centerVertical="true"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_top_picks"
+            android:layout_centerHorizontal="true" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_top_brands"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:text="Top Brands For You"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerview_top"
+            android:textColor="@color/black_text_color"
+            android:textSize="@dimen/_12ssp"
+            />
+        <!--Recycler View widget-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_brand"
+            android:scrollbars="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:layout_centerVertical="true"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_top_brands"
+            android:layout_centerHorizontal="true" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_top_food"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:text="Top Foods For You"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerview_brand"
+            android:textColor="@color/black_text_color"
+            android:textSize="@dimen/_12ssp"
+            />
+        <!--Recycler View widget-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_food"
+            android:scrollbars="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:layout_centerVertical="true"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_top_food"
+            android:layout_centerHorizontal="true" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</androidx.core.widget.NestedScrollView>
+</layout>

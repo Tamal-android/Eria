@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/red_back">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/login_background">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_verify_otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:textAlignment="center"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="@dimen/_2sdp"
+            android:text="Verify OTP"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_16ssp"
+            />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_otp"
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_verify_otp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:textAlignment="center"
+            android:layout_margin="@dimen/_10sdp"
+            android:fontFamily="@font/roboto_regular"
+            android:text="We have just send your phone, an OTP, Please Below to verify"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_12ssp"
+            />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_resend_otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/clOtpEditText"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:textAlignment="center"
+            android:fontFamily="@font/roboto_regular"
+            android:padding="@dimen/_2sdp"
+            android:text="Resent on 00:32"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_12ssp"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clOtpEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_40sdp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_otp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+          >
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etOtpNo1"
+                style="@style/OtpEditTextStyle"
+                android:imeOptions="actionNext"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/etOtpNo2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etOtpNo2"
+                style="@style/OtpEditTextStyle"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:imeOptions="actionNext"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintLeft_toRightOf="@+id/etOtpNo1"
+                app:layout_constraintRight_toLeftOf="@+id/etOtpNo3"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etOtpNo3"
+                style="@style/OtpEditTextStyle"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:imeOptions="actionNext"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintLeft_toRightOf="@+id/etOtpNo2"
+                app:layout_constraintRight_toLeftOf="@+id/etOtpNo4"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etOtpNo4"
+                style="@style/OtpEditTextStyle"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:imeOptions="actionDone"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintLeft_toRightOf="@+id/etOtpNo3"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_complete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:layout_margin="@dimen/_20sdp"
+            android:background="@drawable/bg_red_border"
+            android:fontFamily="@font/roboto_regular"
+            android:text="Complete"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_resend_otp"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_14ssp"
+            />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/view"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:textAlignment="center"
+            android:lineSpacingExtra="@dimen/_5sdp"
+            android:fontFamily="@font/roboto_light"
+            android:text="By Continuing, you agree to our Terms of Service Privacy Policy"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_12ssp"
+            />
+        <View
+            android:id="@+id/view"
+            android:layout_width="@dimen/_220sdp"
+            android:layout_height="0.5dp"
+            android:background="@android:color/white"
+            android:layout_marginBottom="@dimen/_20sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"></View>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

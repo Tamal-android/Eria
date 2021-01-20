@@ -1,0 +1,139 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+/*
+    id 'com.google.gms.google-services'
+*/
+    id 'com.google.firebase.crashlytics'
+}
+
+android {
+    compileSdkVersion rootProject.ext.targetSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    buildFeatures {
+        dataBinding true
+    }
+
+    defaultConfig {
+        applicationId "com.eria"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        //Defining Log debugging
+        buildConfigField "boolean", "LOG_DEBUG_MODE", "false"
+        buildConfigField "boolean", "LOG_DEBUG_WITH_STACKTRACE_MODE", "false"
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ".dev"
+
+            //Defining Log debugging
+            buildConfigField "boolean", "LOG_DEBUG_MODE", "true"
+            buildConfigField "boolean", "LOG_DEBUG_WITH_STACKTRACE_MODE", "true"
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def project = rootProject.ext.appName
+            def SEP = "_"
+            def version = versionName
+            def date = new Date()
+            def formattedDate = date.format('dd-MM-yy')
+
+            def newApkName = project + SEP + version + SEP + formattedDate + ".apk"
+
+            outputFileName = new File(newApkName)
+        }
+    }
+}
+
+dependencies {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation kotlinDependencies.ktx
+    implementation project(path: ':dlocation')
+
+    //Support Libs
+    implementation supportDependencies.appCompat
+    implementation supportDependencies.recyclerView
+    implementation supportDependencies.cardView
+    implementation supportDependencies.material
+    implementation supportDependencies.constraintLayout
+
+    //Dimen Libs
+    implementation dimensionDependencies.sdp
+    implementation dimensionDependencies.ssp
+
+    //Image Loading
+    implementation imageLoaderDependencies.glide
+    implementation 'androidx.wear:wear:1.0.0'
+    annotationProcessor imageLoaderDependencies.glideCompiler
+
+    //Image Picker
+    implementation imagePickerDependencies.imagePicker
+
+    //Custom Views
+    implementation customViewDependencies.circularImageView
+
+    //Other Views
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+
+    //Networking
+    implementation networkDependencies.retrofit
+    implementation networkDependencies.retrofitGSON
+    implementation networkDependencies.retrofitRXJava
+    implementation networkDependencies.okHttp
+    implementation networkDependencies.okHttpLogging
+    implementation networkDependencies.moshiConverter
+    implementation networkDependencies.moshiKotlin
+    compileOnly 'com.google.android.wearable:wearable:2.8.1'
+    kapt networkDependencies.moshiKotlinCodegen
+    implementation networkDependencies.gson
+
+    //Dagger
+    implementation diDependencies.dagger
+    kapt diDependencies.daggerCompiler
+    implementation diDependencies.daggerAndroid
+    kapt diDependencies.daggerProcessor
+    implementation diDependencies.daggerSupport
+
+    //Firebase
+    implementation platform('com.google.firebase:firebase-bom:25.12.0')
+    implementation firebaseDependencies.crashlyticsKtx
+    implementation firebaseDependencies.analyticsKtx
+    implementation firebaseDependencies.fcmKtx
+    //Other Views
+    implementation 'com.bogdwellers:pinchtozoom:0.1'
+    implementation 'com.github.chrisbanes:PhotoView:1.3.0'
+    implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+/*    //Google Map
+    implementation mapDependencies.googleMap
+    implementation mapDependencies.googleLocation
+    implementation mapDependencies.googlePlaces
+    implementation mapDependencies.mapUtils*/
+}

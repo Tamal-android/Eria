@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Staging Server-->
+
+    <!-- <string name="base_url_api" translatable="false">http://182.73.39.13/projects/vtcab/api/</string>
+     &lt;!&ndash;Image Url&ndash;&gt;
+     <string name="base_url_img" translatable="false">http://182.73.39.13/projects/vtcab/uploads/</string>-->
+
+    <!--Production Server-->
+    <string name="base_url_api" translatable="false">https://www.airportwinooskicab.com/api/</string>
+
+    <!--Image Url-->
+    <string name="base_url_img" translatable="false">https://www.airportwinooskicab.com/uploads/</string>
+
+    <!--Cms Url-->
+    <string name="base_url_cms" translatable="false">https://www.airportwinooskicab.com/</string>
+
+
+    <string name="img_vehicles" translatable="false">vehicles/</string>
+    <string name="img_users" translatable="false">users/</string>
+    <string name="img_cms_pages" translatable="false">cms_pages/</string>
+    <string name="img_gallery" translatable="false">gallery/</string>
+
+
+    <!--API Error Message-->
+    <string name="error_network_timeout">Connection timed out!!! Please try again later</string>
+    <string name="error_network">Please check your network connection and try again later!</string>
+    <string name="error_parse">Oops! Data received was an unreadable mess</string>
+    <string name="error_auth_failure">Authentication required to fulfill the request</string>
+    <string name="error_server">Internal server error!!! Please try again later</string>
+    <string name="error_something_went_wrong">Something went wrong!!</string>
+<!--
+    &lt;!&ndash;Braintree&ndash;&gt;
+    &lt;!&ndash;Sandbox&ndash;&gt;
+    <string name="braintree_sandbox_url">https://braintree-sample-merchant.herokuapp.com</string>
+
+    &lt;!&ndash;Production&ndash;&gt;
+    <string name="braintree_production_url">https://executive-sample-merchant.herokuapp.com</string>-->
+</resources>

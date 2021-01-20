@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Eria</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="pref_previously_started">previously_started</string>
+
+    <string name="hello_world">Hello Square World!</string>
+    <string name="tutorial_first">Select Food Item</string>
+    <string name="tutorial_second">Enter Your Address</string>
+    <string name="tutorial_third">Ship At Your Home</string>
+    <string name="hint_phone">Phone Number</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_email">Email</string>
+
+    <string name="error_phone">Please Enter Phone Number</string>
+    <string name="home">Home</string>
+    <string name="cart">Cart</string>
+    <string name="search">Search</string>
+    <string name="profile">Profile</string>
+    <string name="press_again_to_exit">Please press back again to exit</string>
+
+    <string name="txt_progress_loading" translatable="false">Please wait...</string>
+
+
+
+
+</resources>
