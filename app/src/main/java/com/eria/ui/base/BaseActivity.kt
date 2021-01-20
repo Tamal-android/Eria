@@ -42,6 +42,7 @@ open class BaseActivity : AppCompatActivity() {
         )
     }
 
+
     protected open fun getLocationManager(): LocationManager? {
         return locationManager
     }
@@ -158,7 +159,7 @@ open class BaseActivity : AppCompatActivity() {
         try {
             val inputMethodManager =
                 getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(this.currentFocus!!.windowToken, 0)
+            inputMethodManager!!.hideSoftInputFromWindow(this.currentFocus!!.windowToken, 0)
         } catch (e: Exception) {
             e.printStackTrace()
         }

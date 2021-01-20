@@ -9,10 +9,12 @@ class LoginRegisterResponse : BaseResponse() {
     @Expose
     var loginData: LoginRegisterData? = null
 
+    @JvmName("setLoginData1")
     fun setLoginData(loginData: LoginRegisterData?) {
         this.loginData = loginData
     }
 
+    @JvmName("getLoginData1")
     fun getLoginData(): LoginRegisterData? {
         return loginData
     }

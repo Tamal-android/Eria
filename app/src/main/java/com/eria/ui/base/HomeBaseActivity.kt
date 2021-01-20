@@ -15,10 +15,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.eria.R
 import com.eria.databinding.ActivityHomeBaseBinding
 import com.eria.databinding.FragmentProfileBinding
-import com.eria.ui.fragment.CartFragment
-import com.eria.ui.fragment.DashboardFragment
-import com.eria.ui.fragment.ProfileFragment
-import com.eria.ui.fragment.SearchFragment
+import com.eria.ui.fragment.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.concurrent.ConcurrentHashMap
 
@@ -45,7 +42,7 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
         initView()
         initClickListener()
 
-        changeFragment(DashboardFragment.newInstance())
+        changeFragment(LocationRequestFragment.newInstance())
 
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN

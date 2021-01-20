@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eria.R
+import com.eria.data.model.response.TopPicks
+import com.eria.data.model.response.TopPicksResponse
 import com.eria.databinding.FragmentDashboardBinding
 import com.eria.ui.adapter.TopBrandsAdapter
 import com.eria.ui.adapter.TopFoodsAdapter
@@ -63,11 +65,16 @@ class DashboardFragment : Fragment() {
 
         var adapter2:TopPicksAdapter ? = null
 
-        adapter2 = TopPicksAdapter(baseActivity!!)
+        val toppicksList = ArrayList<TopPicks>()
+        adapter2 = TopPicksAdapter(baseActivity!!,toppicksList)
         binding.recyclerviewTop.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL,
                 false)
         binding.recyclerviewTop.adapter = adapter2
-
+        for (i in 10 downTo 1) {
+            var movie = TopPicks("", "abcd")
+            toppicksList.add(movie)
+        }
+        adapter2.notifyDataSetChanged()
     }
 
 }

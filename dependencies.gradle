@@ -50,6 +50,7 @@ ext {
 
     //GoogleMap
     googleMapVersion = "17.0.0"
+    googlePlayVersion = "17.1.0"
     googlePlaceVersion = "2.4.0"
     mapUtilsVersion = "2.0.3"
 
@@ -149,6 +150,7 @@ ext {
     mapDependencies = [
             googleMap     : "com.google.android.gms:play-services-maps:${googleMapVersion}",
             googleLocation: "com.google.android.gms:play-services-location:${googleMapVersion}",
+            /*googlePlayLocation: "com.google.android.gms:play-services-location:${googlePlayVersion}",*/
             googlePlaces  : "com.google.android.libraries.places:places:${googlePlaceVersion}",
             mapUtils      : "com.google.maps.android:android-maps-utils:${mapUtilsVersion}"
     ]
