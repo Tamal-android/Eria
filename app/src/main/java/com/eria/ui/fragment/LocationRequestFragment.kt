@@ -58,25 +58,14 @@ class LocationRequestFragment : Fragment(), View.OnClickListener, LocationListen
         baseActivity?.setToolbarTitle("Set Location")
         binding.btnMyLocation.setOnClickListener(this)
         binding.btnCustomLocation.setOnClickListener(this)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        if (!checkPermissions()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions()
-            }
-        }
+
+        getCurrentLocation()
     }
 
     private fun getCurrentLocation() {
         baseActivity!!.initLocation(this)
         baseActivity!!.getLocation()
         //showToast(homeBaseActivity.getLocation().toString())
-    }
-    private fun checkPermissions(): Boolean {
-        val permissionState = ActivityCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-        return permissionState == PackageManager.PERMISSION_GRANTED
     }
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -113,23 +102,6 @@ class LocationRequestFragment : Fragment(), View.OnClickListener, LocationListen
                     )
                 }
             }
-        }
-    }
-    private fun requestPermissions() {
-        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(
-            requireActivity(),
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-        if (shouldProvideRationale) {
-            Log.i(TAG, "Displaying permission rationale to provide additional context.")
-            showSnackbar("Location permission is needed for core functionality", "Okay",
-                View.OnClickListener {
-                    startLocationPermissionRequest()
-                })
-        }
-        else {
-            Log.i(TAG, "Requesting permission")
-            startLocationPermissionRequest()
         }
     }
 
@@ -187,6 +159,7 @@ class LocationRequestFragment : Fragment(), View.OnClickListener, LocationListen
 
             R.id.btn_MyLocation-> {
 
+                getCurrentLocation()
             }
             R.id.btn_CustomLocation-> {
 
@@ -194,31 +167,29 @@ class LocationRequestFragment : Fragment(), View.OnClickListener, LocationListen
         }
     }
 
+
     override fun onProcessTypeChanged(processType: Int) {
-        TODO("Not yet implemented")
     }
 
     override fun onLocationChanged(location: Location?) {
-        TODO("Not yet implemented")
+        print("LOCATION   "+location?.latitude.toString()+"  "+location?.longitude.toString())
+        showMessage("LOCATION   "+location?.latitude.toString()+"  "+location?.longitude.toString())
     }
 
     override fun onLocationFailed(type: Int) {
-        TODO("Not yet implemented")
     }
 
     override fun onPermissionGranted(alreadyHadPermission: Boolean) {
-        TODO("Not yet implemented")
+        //showMessage("GRANTED")
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        TODO("Not yet implemented")
     }
 
     override fun onProviderEnabled(provider: String?) {
-        TODO("Not yet implemented")
+        showMessage("ENABLED")
     }
 
     override fun onProviderDisabled(provider: String?) {
-        TODO("Not yet implemented")
     }
 }

@@ -86,33 +86,32 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     private fun callLoginApi(loginReqModel: LoginReqModel) {
         showProgress(getString(R.string.txt_progress_loading))
         val loginApiCall = getWebService().callLoginApi(loginReqModel)
-        loginApiCall.enqueue(object : ApiCallback<LoginRegisterResponse>() {
-            override fun onSuccess(loginRegisterResponse: LoginRegisterResponse) {
-                when (loginRegisterResponse.status) {
+        loginApiCall!!.enqueue(object : ApiCallback<LoginRegisterResponse>() {
+            override fun onFinish() {
+                hideProgress()
+            }
+            override fun onSuccess(loginRegisterResponse: LoginRegisterResponse?) {
+                when (loginRegisterResponse?.status) {
                     ApiConfig.CALL_SUCCESS -> {
-                        showToast(loginRegisterResponse.message)
+                        showToast(loginRegisterResponse.message!!)
                         saveUserDataInPref(loginRegisterResponse)
-                       // moveToDashboard()
+                        // moveToDashboard()
                     }
-                    ApiConfig.CALL_FAILED_STATUS_0 -> showToast(loginRegisterResponse.message)
-                    ApiConfig.CALL_FAILED_STATUS_2 -> showToast(loginRegisterResponse.message)
-                    ApiConfig.CALL_FAILED_STATUS_3 -> showToast(loginRegisterResponse.message)
-                    ApiConfig.CALL_FAILED_STATUS_4 -> showToast(loginRegisterResponse.message)
-                    ApiConfig.CALL_FAILED_STATUS_5 -> showToast(loginRegisterResponse.message)
+                    ApiConfig.CALL_FAILED_STATUS_0 -> showToast(loginRegisterResponse.message!!)
+                    ApiConfig.CALL_FAILED_STATUS_2 -> showToast(loginRegisterResponse.message!!)
+                    ApiConfig.CALL_FAILED_STATUS_3 -> showToast(loginRegisterResponse.message!!)
+                    ApiConfig.CALL_FAILED_STATUS_4 -> showToast(loginRegisterResponse.message!!)
+                    ApiConfig.CALL_FAILED_STATUS_5 -> showToast(loginRegisterResponse.message!!)
                     else -> showToast(getString(R.string.error_something_went_wrong))
                 }
             }
 
-            override fun onFailure(code: Int, msg: String) {
-                showToast(msg)
+            override fun onFailure(code: Int, msg: String?) {
+                showToast(msg!!)
             }
 
-            override fun onThrowable(t: Throwable) {
+            override fun onThrowable(t: Throwable?) {
                 showToast(getString(R.string.error_parse))
-            }
-
-            override fun onFinish() {
-                hideProgress()
             }
 
         })

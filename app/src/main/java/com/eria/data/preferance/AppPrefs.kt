@@ -15,6 +15,8 @@ class AppPrefs : DPrefs() {
     private val PREF_KEY_IS_FIRST_TIME = "KEY_IS_FIRST_TIME"
     private val PREF_KEY_USER_NAME = "KEY_USER_NAME"
     private val PREF_KEY_USER_TYPE = "KEY_USER_TYPE"
+    private val PREF_KEY_CURRENT_LATITUDE = "KEY_CURRENT_LATITUDE"
+    private val PREF_KEY_CURRENT_LONGITUDE = "KEY_CURRENT_LONGITUDE"
 
     private val PREF_DEFAULT_USER_ID = ""
     private val PREF_DEFAULT_AUTH_TOKEN = ""
@@ -26,6 +28,8 @@ class AppPrefs : DPrefs() {
     private val PREF_DEFAULT_FIRST_TIME = true
     private val PREF_DEFAULT_USER_NAME = ""
     private val PREF_DEFAULT_USER_TYPE = ""
+    private val PREF_DEFAULT_CURRENT_LATITUDE = ""
+    private val PREF_DEFAULT_CURRENT_LONGITUDE = ""
 
 
     fun setIsFirstTimeUser(mContext: Context, boolean: Boolean) {
@@ -83,5 +87,19 @@ class AppPrefs : DPrefs() {
 
     fun getFcmToken(mContext: Context): String? {
         return getString(mContext,PREF_KEY_FCM_TOKEN, PREF_DEFAULT_FCM_TOKEN)
+    }
+    fun setCurrentLatitude(mContext: Context,latitude: String?) {
+        latitude?.let { setString(mContext,PREF_KEY_CURRENT_LATITUDE, it) }
+    }
+
+    fun getCurrentLatitude(mContext: Context): String? {
+        return getString(mContext,PREF_KEY_CURRENT_LATITUDE, PREF_DEFAULT_CURRENT_LATITUDE)
+    }
+    fun setCurrentLongitude(mContext: Context,longitude: String?) {
+        longitude?.let { setString(mContext,PREF_KEY_CURRENT_LATITUDE, it) }
+    }
+
+    fun getCurrentLongitude(mContext: Context): String? {
+        return getString(mContext,PREF_KEY_CURRENT_LONGITUDE, PREF_DEFAULT_CURRENT_LONGITUDE)
     }
 }

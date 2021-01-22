@@ -37,7 +37,7 @@ open class BaseActivity : AppCompatActivity() {
     private var locationManager: LocationManager? = null
     private fun getLocationConfiguration(): LocationConfiguration {
         return Configurations.defaultConfiguration(
-            "Please grant the permission to continue with VT Cab",
+            "Please grant the permission to continue with Eria",
             "Would you mind to turn GPS on? Please turn the GPS on."
         )
     }

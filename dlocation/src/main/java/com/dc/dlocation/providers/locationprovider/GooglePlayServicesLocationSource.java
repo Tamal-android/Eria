@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.dc.dlocation.constants.RequestCode;
+import com.dc.dlocation.helper.LogUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.Builder;
@@ -131,6 +132,7 @@ class GooglePlayServicesLocationSource implements LocationListener, ConnectionCa
 
     @Override
     public void onLocationChanged(Location location) {
+        LogUtils.logE(location.getLatitude()+"  "+location.getLongitude());
         if (sourceListener != null) sourceListener.onLocationChanged(location);
     }
 }

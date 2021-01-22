@@ -28,4 +28,5 @@
     <string name="set_location_sub">Please Type your information below</string>
 
 
+    <string name="title_activity_maps">Custom Search Location</string>
 </resources>

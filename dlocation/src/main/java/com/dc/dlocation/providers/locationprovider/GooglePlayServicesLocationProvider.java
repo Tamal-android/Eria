@@ -151,6 +151,8 @@ public class GooglePlayServicesLocationProvider extends LocationProvider impleme
             getListener().onLocationChanged(location);
         }
 
+        LogUtils.logI("We got location ");
+
         // Set waiting as false because we got at least one, even though we keep tracking user's location
         setWaiting(false);
 
