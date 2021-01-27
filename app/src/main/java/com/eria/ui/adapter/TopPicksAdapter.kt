@@ -3,17 +3,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.eria.R
 import com.eria.data.model.response.TopPicks
 import com.eria.ui.base.HomeBaseActivity
+import com.eria.ui.fragment.DashboardFragment
+import com.eria.ui.fragment.MenuListFragment
 
 class TopPicksAdapter(
-        private val _context: HomeBaseActivity,
-        _topPicksdata: List<TopPicks?>?
+    private val _context: HomeBaseActivity,
+    _topPicksdata: List<TopPicks?>?
 ) :
     RecyclerView.Adapter<TopPicksAdapter.ViewHolder>() {
 
@@ -32,7 +36,12 @@ class TopPicksAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindItems(_topPicksdata!![position])
         holder.itemView.setOnClickListener(View.OnClickListener {
-            Toast.makeText(mContext!!,"Selected "+_topPicksdata!![position],Toast.LENGTH_SHORT).show()
+            Toast.makeText(mContext!!, "Selected " + _topPicksdata!![position], Toast.LENGTH_SHORT)
+                .show()
+
+            mContext.changeFragment(MenuListFragment.newInstance(),isAddToBackStack = true,isFragmentReplaced = false)
+
+
         })
 
 
@@ -43,6 +52,7 @@ class TopPicksAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         var iv_gallery = itemView.findViewById(R.id.banner_image) as AppCompatImageView
 
         fun bindItems(galleryDataItem: TopPicks) {

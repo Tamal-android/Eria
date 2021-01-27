@@ -1,4 +1,5 @@
 package com.eria.ui.base
+
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
@@ -21,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 
 class HomeBaseActivity : BaseActivity(), View.OnClickListener,
-        BottomNavigationView.OnNavigationItemSelectedListener{
+    BottomNavigationView.OnNavigationItemSelectedListener {
     private val mapOfAddedFragments: ConcurrentHashMap<String, Fragment> = ConcurrentHashMap()
 
     private val tv_toolbar_title: AppCompatTextView by bind(R.id.tv_toolbar_text)
@@ -42,7 +43,11 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
         initView()
         initClickListener()
 
-        changeFragment(LocationRequestFragment.newInstance())
+        changeFragment(
+            LocationRequestFragment.newInstance(),
+            isAddToBackStack = false,
+            isFragmentReplaced = false
+        )
 
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -57,7 +62,7 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
             if (getLocationManager()!!.isWaitingForLocation
                 && !getLocationManager()!!.isAnyDialogShowing
             ) {
-               // showProgress("Please Wait. Getting Updated Location")
+                // showProgress("Please Wait. Getting Updated Location")
             }
         }
     }
@@ -80,9 +85,8 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
     override fun onBackPressed() {
         val fm = supportFragmentManager
         val entryCount = fm.backStackEntryCount
-        if (entryCount > 1) {
-            popFragment()
-        } else {
+        if (entryCount < 1) {
+            showBottomNavigationBar(true)
             if (back_pressed + 1500 > System.currentTimeMillis()) {
                 finish()
                 super.onBackPressed()
@@ -90,6 +94,8 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
                 showToast(getString(R.string.press_again_to_exit))
             }
             back_pressed = System.currentTimeMillis()
+        } else {
+            popFragment()
         }
     }
 
@@ -104,14 +110,22 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
     }
 
     @SuppressLint("ResourceType")
-    private fun changeFragment(fragment: Fragment) {
-        addFragmentToBottomNav(R.id.fl_container, fragment)
+    fun changeFragment(fragment: Fragment, isAddToBackStack: Boolean, isFragmentReplaced: Boolean) {
+        addFragmentToBottomNav(R.id.fl_container, fragment, isAddToBackStack, isFragmentReplaced)
     }
+
     fun popFragment() {
         supportFragmentManager.popBackStack()
     }
+
+
     @SuppressLint("ResourceType")
-    protected fun addFragmentToBottomNav(@LayoutRes fragmentContainer: Int, fragment: Fragment) {
+    protected fun addFragmentToBottomNav(
+        @LayoutRes fragmentContainer: Int,
+        fragment: Fragment,
+        isAddToBackStack: Boolean,
+        isFragmentReplaced: Boolean
+    ) {
         if (fragment != null) {
             val fragmentTag = fragment.javaClass.name
 
@@ -125,11 +139,17 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
             if (fragmentToAdd != null) {
                 if (fragmentToAdd.isAdded)
                     fragmentTransaction.show(fragmentToAdd)
-                else
-                    fragmentTransaction.add(fragmentContainer, fragment, fragmentTag)
+                else {
+                    if (isFragmentReplaced)
+                        fragmentTransaction.replace(fragmentContainer, fragment, fragmentTag)
+                    else
+                        fragmentTransaction.add(fragmentContainer, fragment, fragmentTag)
+                }
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             }
 
+            if (isAddToBackStack)
+                fragmentTransaction.addToBackStack(fragmentTag)
             for ((key, fragmentTemp) in mapOfAddedFragments) {
                 if (key != fragmentTag) {
                     if (fragmentTemp != null)
@@ -149,24 +169,44 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
         when (menuItem.itemId) {
 
             R.id.navigation_home -> {
-           showHeader(false)
-                changeFragment(DashboardFragment.newInstance())
+                showHeader(false)
+                showBottomNavigationBar(true)
+                changeFragment(
+                    DashboardFragment.newInstance(),
+                    isAddToBackStack = false,
+                    isFragmentReplaced = true
+                )
             }
 
 
             R.id.navigation_profile -> {
                 showHeader(true)
-                changeFragment(ProfileFragment.newInstance())
+                showBottomNavigationBar(true)
+                changeFragment(
+                    ProfileFragment.newInstance(),
+                    isAddToBackStack = false,
+                    isFragmentReplaced = true
+                )
             }
 
 
             R.id.navigation_cart -> {
                 showHeader(true)
-                changeFragment(CartFragment.newInstance())
+                showBottomNavigationBar(true)
+                changeFragment(
+                    CartFragment.newInstance(),
+                    isAddToBackStack = false,
+                    isFragmentReplaced = true
+                )
             }
             R.id.navigation_search -> {
                 showHeader(false)
-                changeFragment(SearchFragment.newInstance())
+                showBottomNavigationBar(true)
+                changeFragment(
+                    SearchFragment.newInstance(),
+                    isAddToBackStack = false,
+                    isFragmentReplaced = true
+                )
             }
 
         }
@@ -174,6 +214,13 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
     }
 
 
+    fun showBottomNavigationBar(isShow: Boolean) {
+
+        if (isShow)
+            bottomNavigationView.visibility = View.VISIBLE
+        else
+            bottomNavigationView.visibility = View.GONE
+    }
 
     fun showHeader(isShow: Boolean) {
         if (isShow)
@@ -181,7 +228,6 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
         else
             toolbar.visibility = View.GONE
     }
-
 
 
 }
