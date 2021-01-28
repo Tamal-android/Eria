@@ -90,8 +90,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_horizontal"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:background="@drawable/ic_rectangle"
+                android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivRemoveItem"

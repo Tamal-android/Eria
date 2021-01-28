@@ -8,12 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eria.R
-import com.eria.databinding.FragmentCartBinding
-import com.eria.databinding.FragmentProfileBinding
 import com.eria.databinding.FragmentSearchBinding
-import com.eria.ui.adapter.CardAdapter
 import com.eria.ui.adapter.SearchAdapter
-import com.eria.ui.adapter.TopBrandsAdapter
 import com.eria.ui.base.HomeBaseActivity
 
 

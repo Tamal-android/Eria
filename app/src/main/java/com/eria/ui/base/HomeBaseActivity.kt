@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatTextView
@@ -44,9 +45,9 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
         initClickListener()
 
         changeFragment(
-            LocationRequestFragment.newInstance(),
+            DashboardFragment.newInstance(),
             isAddToBackStack = false,
-            isFragmentReplaced = false
+            isFragmentReplaced = true
         )
 
         window.decorView.systemUiVisibility =
@@ -198,15 +199,18 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
                     isAddToBackStack = false,
                     isFragmentReplaced = true
                 )
+                Toast.makeText(this,"Working. . .",Toast.LENGTH_SHORT).show()
             }
             R.id.navigation_search -> {
-                showHeader(false)
+                /*showHeader(false)
                 showBottomNavigationBar(true)
                 changeFragment(
                     SearchFragment.newInstance(),
                     isAddToBackStack = false,
                     isFragmentReplaced = true
-                )
+                )*/
+
+                Toast.makeText(this,"Working. . .",Toast.LENGTH_SHORT).show()
             }
 
         }

@@ -7,8 +7,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_5sdp"
+        android:elevation="@dimen/_5sdp"
         app:cardCornerRadius="@dimen/_20sdp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -49,15 +49,13 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:background="@drawable/ic_rectangle">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivminus"
                         android:layout_width="@dimen/_10sdp"
                         android:layout_height="@dimen/_10sdp"
                         android:layout_centerVertical="true"
                         android:layout_margin="@dimen/_5sdp"
-                        android:src="@drawable/ic_minus">
-
-                    </ImageView>
+                        android:src="@drawable/ic_minus" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -67,19 +65,18 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/roboto_regular"
                         android:text="1"
+                        android:id="@+id/tvItemQuantity"
                         android:textColor="@color/black_text_color"
                         android:textSize="@dimen/_10ssp" />
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivplus"
                         android:layout_width="@dimen/_10sdp"
                         android:layout_height="@dimen/_10sdp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_margin="@dimen/_5sdp"
-                        android:src="@drawable/ic_plus">
-
-                    </ImageView>
+                        android:src="@drawable/ic_plus" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -88,9 +85,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
+                android:id="@+id/tvPrice"
+                android:layout_margin="@dimen/_10sdp"
                 android:fontFamily="@font/roboto_medium"
                 android:text="$50"
-                android:layout_margin="@dimen/_10sdp"
                 android:textColor="@color/black_text_color"
                 android:textSize="@dimen/_12ssp" />
         </RelativeLayout>
