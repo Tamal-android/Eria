@@ -117,5 +117,9 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
         finish()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
 
 }

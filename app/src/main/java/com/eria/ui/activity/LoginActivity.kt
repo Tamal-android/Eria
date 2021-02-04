@@ -125,7 +125,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         var intent = Intent(this@LoginActivity, OtpActivity::class.java)
         overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
         startActivity(intent)
-        finish()
     }
 
     private fun saveUserDataInPref(loginRegisterResponse: LoginRegisterResponse) {
