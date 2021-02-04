@@ -8,6 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.eria.ui.base.HomeBaseActivity"
+        android:id="@+id/nsvScroll"
+        android:layout_above="@+id/btnCart"
         android:background="@color/colorPrimaryDark"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
     <androidx.constraintlayout.widget.ConstraintLayout

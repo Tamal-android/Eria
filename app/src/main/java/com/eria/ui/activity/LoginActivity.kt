@@ -33,6 +33,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
         binding.tvSignUp.setText(signup, TextView.BufferType.SPANNABLE)
 
+        binding.ccp.setOnCountryChangeListener { selectedCountry ->
+            showToast(selectedCountry.phoneCode)
+
+        }
 
         initClickListener()
 
@@ -166,7 +170,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
       intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
       overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
       startActivity(intent)
-      finish()
   }
 
 }

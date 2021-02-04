@@ -14,6 +14,7 @@ import com.eria.R
 import com.eria.data.model.response.MenuList
 import com.eria.data.model.response.TopPicks
 import com.eria.databinding.FragmentMenuListBinding
+import com.eria.ui.Interface.onMenuItemAdd
 import com.eria.ui.adapter.MenuListAdapter
 import com.eria.ui.base.HomeBaseActivity
 import com.google.android.material.appbar.AppBarLayout
@@ -77,7 +78,16 @@ class MenuListFragment : Fragment() {
         var adapter: MenuListAdapter? = null
 
         val menuList = ArrayList<MenuList>()
-        adapter = MenuListAdapter(baseActivity!!,menuList)
+        adapter = MenuListAdapter(baseActivity!!,menuList,object :onMenuItemAdd{
+            override fun onItemAdded(position: Boolean) {
+                if (position){
+                    binding.btnAddCart.visibility=View.VISIBLE
+                }else{
+                    binding.btnAddCart.visibility=View.GONE
+                }
+
+            }
+        })
         binding.includeLayout.rvMenuList!!.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,
             false)
         binding.includeLayout.tvMenuTitle.text = "Menu List"

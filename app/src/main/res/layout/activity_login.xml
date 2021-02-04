@@ -4,23 +4,31 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/red_back">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/login_background">
+        android:background="@color/colorPrimaryDark"
+        android:paddingTop="@dimen/_4sdp"
+        android:paddingBottom="@dimen/_4sdp">
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_240sdp"
+            android:src="@drawable/ic_login_bg"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_welcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLogo"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_sign_continue"
+            android:layout_marginTop="@dimen/_8sdp"
             android:textAlignment="center"
             android:fontFamily="@font/roboto_medium"
             android:padding="@dimen/_2sdp"
+            android:lineSpacingExtra="4sp"
             android:text="Welcome Back"
             android:textColor="@android:color/white"
             android:textSize="@dimen/_16ssp"
@@ -30,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/tv_welcome"
+            app:layout_constraintBottom_toTopOf="@+id/llPhoneLayout"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:textAlignment="center"
@@ -38,11 +47,52 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/_12ssp"
             />
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llPhoneLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|center_horizontal"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/_2sdp"
+            android:paddingEnd="@dimen/_2sdp"
+            android:background="@drawable/bg_white_background"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_send_otp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_sign_continue">
+
+            <com.rilixtech.widget.countrycodepicker.CountryCodePicker
+                android:id="@+id/ccp"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_44sdp"
+                android:gravity="center|center_horizontal"
+                app:ccp_countryPreference="US,IN,NZ"
+                app:ccp_defaultNameCode="US" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_44sdp"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/hint_phone"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:background="@null"
+                android:maxLength="10"
+                android:padding="@dimen/_10sdp"
+                android:singleLine="true"
+                android:textColor="@color/black_text_color"
+                android:textSize="@dimen/_12ssp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/et_phone_number"
+                <!--<androidx.appcompat.widget.AppCompatEditText
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_10sdp"
@@ -61,7 +111,7 @@
                     android:inputType="number"
                     android:textColor="@color/black_text_color"
                     android:singleLine="true"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_12ssp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_send_otp"
@@ -74,7 +124,8 @@
             android:text="Send OTP"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_phone_number"
+            app:layout_constraintTop_toBottomOf="@+id/llPhoneLayout"
+            app:layout_constraintBottom_toTopOf="@+id/tv_sign_up"
             android:textColor="@android:color/white"
             android:textSize="@dimen/_14ssp"
             />
@@ -82,7 +133,8 @@
             android:id="@+id/tv_sign_up"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/view"
+            app:layout_constraintBottom_toTopOf="@+id/tvTerms"
+            app:layout_constraintTop_toBottomOf="@+id/btn_send_otp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginBottom="@dimen/_5sdp"
@@ -92,16 +144,34 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/_12ssp"
             />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_sign_up"
+            android:id="@+id/tvTerms"
+            app:layout_constraintBottom_toTopOf="@+id/view"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:textAlignment="center"
+            android:lineSpacingExtra="@dimen/_5sdp"
+            android:fontFamily="@font/roboto_light"
+            android:text="By Continuing, you agree to our Terms of Service Privacy Policy"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_12ssp"
+            />
       <View
           android:id="@+id/view"
           android:layout_width="@dimen/_220sdp"
           android:layout_height="0.5dp"
           android:background="@android:color/white"
-          android:layout_marginBottom="@dimen/_20sdp"
+          android:layout_marginBottom="@dimen/_10sdp"
+          app:layout_constraintTop_toBottomOf="@+id/tvTerms"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintLeft_toLeftOf="parent"></View>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+          app:layout_constraintLeft_toLeftOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -6,9 +6,9 @@ import android.text.*
 import android.text.style.TextAppearanceSpan
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.eria.R
-import com.eria.databinding.ActivityLoginBinding
 import com.eria.databinding.ActivityRegisterBinding
 import com.eria.ui.base.BaseActivity
 import java.security.AccessController.getContext
@@ -24,10 +24,24 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
 
         val signup = SpannableString("You Have an account Sign In")
 
-        signup.setSpan(TextAppearanceSpan(this, R.font.roboto_regular), 0, 20, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        signup.setSpan(TextAppearanceSpan(this, R.font.roboto_bold), 21, 25, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        signup.setSpan(
+            TextAppearanceSpan(this, R.font.roboto_regular),
+            0,
+            20,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        signup.setSpan(
+            TextAppearanceSpan(this, R.font.roboto_bold),
+            21,
+            25,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
 
         binding.tvSign.setText(signup, TextView.BufferType.SPANNABLE)
+        binding.ccp.setOnCountryChangeListener { selectedCountry ->
+          showToast(selectedCountry.phoneCode)
+
+        }
 
         initClickListener()
     }

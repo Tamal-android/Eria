@@ -3,7 +3,7 @@
     android:width="375dp"
     android:height="839.333dp"
     android:viewportWidth="375"
-    android:viewportHeight="839.333">
+    android:viewportHeight="700">
   <path
       android:pathData="M0,27.333h375v812h-375z">
     <aapt:attr name="android:fillColor">

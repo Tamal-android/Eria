@@ -31,4 +31,10 @@
     <string name="title_activity_maps">Custom Search Location</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tutorial_fragment_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque mollis</string>
+    <string name="tutorial_fragment_title1">Select Food Item</string>
+    <string name="tutorial_fragment_title2">Enter Your Address</string>
+    <string name="tutorial_fragment_title3">Ship At Your Home</string>
+
+
 </resources>

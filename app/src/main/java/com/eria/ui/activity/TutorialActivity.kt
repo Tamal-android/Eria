@@ -26,6 +26,16 @@ class TutorialActivity : BaseActivity(), View.OnClickListener {
         R.drawable.tutorial_second,
         R.drawable.tutorial_third
     )
+    private var banner_text = intArrayOf(
+        R.string.tutorial_fragment_text,
+        R.string.tutorial_fragment_text,
+        R.string.tutorial_fragment_text
+    )
+    private var banner_title = intArrayOf(
+        R.string.tutorial_fragment_title1,
+        R.string.tutorial_fragment_title2,
+        R.string.tutorial_fragment_title3
+    )
 
     private lateinit var dots_indicator: DotsIndicator
 
@@ -50,7 +60,7 @@ class TutorialActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun setvalues() {
-        view_pager!!.adapter = TutorialAdapter(this, banner_images)
+        view_pager!!.adapter = TutorialAdapter(this, banner_images,banner_title,banner_text)
         dots_indicator.setViewPager(view_pager)
 
 

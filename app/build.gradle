@@ -75,6 +75,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation kotlinDependencies.ktx
     implementation project(path: ':dlocation')
+    implementation project(path: ':countrycodepicker')
 
     //Support Libs
     implementation supportDependencies.appCompat
@@ -132,6 +133,7 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.hbb20:ccp:2.4.5'
     //Google Map
     implementation mapDependencies.googleMap
     implementation mapDependencies.googleLocation
