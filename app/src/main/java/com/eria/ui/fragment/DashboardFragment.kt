@@ -49,6 +49,10 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         baseActivity?.showHeader(false)
 
+        binding.svSearch.setOnClickListener(View.OnClickListener {
+            binding.svSearch.isIconified = false
+        })
+
         var adapter:TopBrandsAdapter ? = null
 
         adapter = TopBrandsAdapter(baseActivity!!)

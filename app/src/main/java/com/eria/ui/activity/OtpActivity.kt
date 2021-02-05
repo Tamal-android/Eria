@@ -5,12 +5,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.databinding.DataBindingUtil
 import com.eria.R
+import com.eria.app.EriaApplication
+import com.eria.data.model.request.OTPReqModel
+import com.eria.data.model.request.RegisterReqModel
+import com.eria.data.model.response.LoginRegisterResponse
+import com.eria.data.model.response.OTPVerifyResponse
+import com.eria.data.network.ApiCallback
 import com.eria.databinding.ActivityOtpBinding
 import com.eria.ui.base.BaseActivity
 import com.eria.ui.base.HomeBaseActivity
@@ -20,12 +27,14 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityOtpBinding
     private lateinit var otpEditTexts: Array<AppCompatEditText>
+    var otp:String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_otp)
-
+        otp=intent.getStringExtra("otp").toString()+"  "+intent.getIntExtra("userId",0).toString()
+        Log.e(this.javaClass.name, otp!!)
         initOtpEditTexts()
        initClickListener()
 
@@ -39,17 +48,19 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
 
     private fun initOtpEditTexts() {
         otpEditTexts =
-            arrayOf(binding.etOtpNo1, binding.etOtpNo2, binding.etOtpNo3, binding.etOtpNo4)
+            arrayOf(binding.etOtpNo1, binding.etOtpNo2, binding.etOtpNo3, binding.etOtpNo4, binding.etOtpNo5)
 
         binding.etOtpNo1.addTextChangedListener(OtpTextWatcher(0))
         binding.etOtpNo2.addTextChangedListener(OtpTextWatcher(1))
         binding.etOtpNo3.addTextChangedListener(OtpTextWatcher(2))
         binding.etOtpNo4.addTextChangedListener(OtpTextWatcher(3))
+        binding.etOtpNo5.addTextChangedListener(OtpTextWatcher(4))
 
         binding.etOtpNo1.setOnKeyListener(OtpOnKeyListener(0))
         binding.etOtpNo2.setOnKeyListener(OtpOnKeyListener(1))
         binding.etOtpNo3.setOnKeyListener(OtpOnKeyListener(2))
         binding.etOtpNo4.setOnKeyListener(OtpOnKeyListener(3))
+        binding.etOtpNo5.setOnKeyListener(OtpOnKeyListener(4))
     }
 
 
@@ -147,15 +158,56 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.btn_complete -> {
-                var intent = Intent(this, HomeBaseActivity::class.java)
-                overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
-                startActivity(intent)
-                finish()
+                Log.e(this.javaClass.name,EriaApplication.appPrefs.getUserId(this).toString())
+                EriaApplication.getPrefs().getUserId(this@OtpActivity)?.let { OTPReqModel(it,
+                    otpEditTexts[0].text.toString()+ otpEditTexts[1].text.toString()+ otpEditTexts[2].text.toString()+ otpEditTexts[3].text.toString()+ otpEditTexts[4].text.toString()) }?.let {
+                    callOTPApi(
+                        it
+                    )
+                }
+
             }
         }
     }
 
+    private fun callOTPApi(otpReqModel : OTPReqModel) {
+        showProgress(getString(R.string.txt_progress_loading))
+        val otpApiCall = getWebService().callOTPApi(otpReqModel)
+        otpApiCall!!.enqueue(object : ApiCallback<OTPVerifyResponse>() {
+            override fun onFinish() {
+                hideProgress()
+            }
 
+            override fun onSuccess(otpVerifyResponse: OTPVerifyResponse?) {
+
+                if (otpVerifyResponse?.status!!) {
+                    //when (loginRegisterResponse?.status) {
+                    otpVerifyResponse?.data?.let { Log.e("ggg", it.toString()) }
+                    showToast(otpVerifyResponse?.message!!)
+                    if (otpVerifyResponse?.data?.result!!) {
+                       moveToDashBoard()
+                    }
+                } else showToast(getString(R.string.error_something_went_wrong))
+
+            }
+
+            override fun onFailure(code: Int, msg: String?) {
+                showToast(msg!!)
+            }
+
+            override fun onThrowable(t: Throwable?) {
+                showToast(getString(R.string.error_parse))
+            }
+
+        })
+    }
+
+    private fun moveToDashBoard() {
+        var intent = Intent(this@OtpActivity, HomeBaseActivity::class.java)
+        overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
+        startActivity(intent)
+        finish()
+    }
     override fun onBackPressed() {
         super.onBackPressed()
         finish()

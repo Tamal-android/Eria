@@ -6,6 +6,8 @@ import android.content.SharedPreferences
 class AppPrefs : DPrefs() {
 
     private val PREF_KEY_USER_ID = "KEY_USER_ID"
+    private val PREF_KEY_OTP = "KEY_OTP"
+    private val PREF_KEY_MOBILE_NO = "KEY_MOBILE_NO"
     private val PREF_KEY_AUTH_TOKEN = "KEY_AUTH_TOKEN"
     private val PREF_KEY_SIGN_IN_MOBILE = "KEY_SIGN_IN_MOBILE"
     private val PREF_KEY_USER_EMAIL = "KEY_USER_EMAIL"
@@ -18,7 +20,9 @@ class AppPrefs : DPrefs() {
     private val PREF_KEY_CURRENT_LATITUDE = "KEY_CURRENT_LATITUDE"
     private val PREF_KEY_CURRENT_LONGITUDE = "KEY_CURRENT_LONGITUDE"
 
-    private val PREF_DEFAULT_USER_ID = ""
+    private val PREF_DEFAULT_USER_ID = 0
+    private val PREF_DEFAULT_OTP = ""
+    private val PREF_DEFAULT_MOBILE_NO = ""
     private val PREF_DEFAULT_AUTH_TOKEN = ""
     private val PREF_DEFAULT_SIGN_IN_MOBILE = ""
     private val PREF_DEFAULT_USER_EMAIL = ""
@@ -49,12 +53,27 @@ class AppPrefs : DPrefs() {
     }
 
 
-    fun setUserId(mContext: Context,userHash: String?) {
-        userHash?.let { setString(mContext,PREF_KEY_USER_ID, it) }
+    fun setUserId(mContext: Context,userHash: Int?) {
+        userHash?.let { setInt(mContext,PREF_KEY_USER_ID, it) }
     }
 
-    fun getUserId(mContext: Context): String? {
-        return getString(mContext,PREF_KEY_USER_ID, PREF_DEFAULT_USER_ID)
+    fun getUserId(mContext: Context): Int? {
+        return getInt(mContext,PREF_KEY_USER_ID, PREF_DEFAULT_USER_ID)
+    }
+
+    fun setOTP(mContext: Context,otpHash: String?) {
+        otpHash?.let { setString(mContext,PREF_KEY_OTP, it) }
+    }
+
+    fun getOTP(mContext: Context): String? {
+        return getString(mContext,PREF_KEY_OTP, PREF_DEFAULT_OTP)
+    }
+    fun setMobile_no(mContext: Context,otpHash: String?) {
+        otpHash?.let { setString(mContext,PREF_KEY_OTP, it) }
+    }
+
+    fun getMobile_no(mContext: Context): String? {
+        return getString(mContext,PREF_KEY_OTP, PREF_DEFAULT_OTP)
     }
 
     fun setUserName(mContext: Context,userName: String?) {

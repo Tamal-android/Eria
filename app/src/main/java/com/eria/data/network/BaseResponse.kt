@@ -3,16 +3,18 @@ package com.eria.data.network
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-open class BaseResponse {
+open class BaseResponse<T> {
     @SerializedName("status")
     @Expose
-    var status = 0
+    var status :Boolean = false
 
     @SerializedName("message")
     @Expose
     var message: String? = null
-
-    @JvmName("getStatus1")
+    @SerializedName("data")
+    @Expose
+    var data: T? = null
+  /*  @JvmName("getStatus1")
     fun getStatus(): Int {
         return status
     }
@@ -30,5 +32,5 @@ open class BaseResponse {
     @JvmName("setMessage1")
     fun setMessage(message: String?) {
         this.message = message
-    }
+    }*/
 }

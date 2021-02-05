@@ -24,7 +24,7 @@ interface ApiConfig {
         const val API_LOGIN = "login"
         const val API_REGISTER = "register"
         const val API_FORGOT_PASSWORD = "forgetpassword"
-        const val API_VERIFY_OTP = "verifyotp"
+        const val API_VERIFY_OTP = "confirmOtp"
         const val API_RESET_PASSWORD = "resetpassword"
         const val API_LOCATION_LISTING = "locationlisting"
         const val API_CHANGE_PASSWORD = "locationlisting"

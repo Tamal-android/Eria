@@ -5,8 +5,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-abstract class ApiCallback<M> : Callback<LoginRegisterResponse?> {
-    abstract fun onSuccess(model: LoginRegisterResponse?)
+abstract class ApiCallback<M> : Callback<M?> {
+    abstract fun onSuccess(model: M?)
 
     abstract fun onFailure(code: Int, msg: String?)
 
@@ -15,8 +15,8 @@ abstract class ApiCallback<M> : Callback<LoginRegisterResponse?> {
     abstract fun onFinish()
 
     override fun onResponse(
-        call: Call<LoginRegisterResponse?>,
-        response: Response<LoginRegisterResponse?>
+        call: Call<M?>,
+        response: Response<M?>
     ) {
         if (response.isSuccessful) {
             onSuccess(response.body())
@@ -26,7 +26,7 @@ abstract class ApiCallback<M> : Callback<LoginRegisterResponse?> {
         onFinish()
     }
 
-    override fun onFailure(call: Call<LoginRegisterResponse?>, t: Throwable) {
+    override fun onFailure(call: Call<M?>, t: Throwable) {
         onThrowable(t)
         onFinish()
     }

@@ -96,16 +96,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             }
             override fun onSuccess(loginRegisterResponse: LoginRegisterResponse?) {
                 when (loginRegisterResponse?.status) {
-                    ApiConfig.CALL_SUCCESS -> {
-                        showToast(loginRegisterResponse.message!!)
-                        saveUserDataInPref(loginRegisterResponse)
-                        // moveToDashboard()
-                    }
-                    ApiConfig.CALL_FAILED_STATUS_0 -> showToast(loginRegisterResponse.message!!)
-                    ApiConfig.CALL_FAILED_STATUS_2 -> showToast(loginRegisterResponse.message!!)
-                    ApiConfig.CALL_FAILED_STATUS_3 -> showToast(loginRegisterResponse.message!!)
-                    ApiConfig.CALL_FAILED_STATUS_4 -> showToast(loginRegisterResponse.message!!)
-                    ApiConfig.CALL_FAILED_STATUS_5 -> showToast(loginRegisterResponse.message!!)
+//                    ApiConfig.CALL_SUCCESS -> {
+//                        showToast(loginRegisterResponse.message!!)
+//                      //  saveUserDataInPref(loginRegisterResponse)
+//                        // moveToDashboard()
+//                    }
+//                    ApiConfig.CALL_FAILED_STATUS_0 -> showToast(loginRegisterResponse.message!!)
+//                    ApiConfig.CALL_FAILED_STATUS_2 -> showToast(loginRegisterResponse.message!!)
+//                    ApiConfig.CALL_FAILED_STATUS_3 -> showToast(loginRegisterResponse.message!!)
+//                    ApiConfig.CALL_FAILED_STATUS_4 -> showToast(loginRegisterResponse.message!!)
+//                    ApiConfig.CALL_FAILED_STATUS_5 -> showToast(loginRegisterResponse.message!!)
                     else -> showToast(getString(R.string.error_something_went_wrong))
                 }
             }
@@ -127,7 +127,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         startActivity(intent)
     }
 
-    private fun saveUserDataInPref(loginRegisterResponse: LoginRegisterResponse) {
+    /*private fun saveUserDataInPref(loginRegisterResponse: LoginRegisterResponse) {
 
         EriaApplication.getPrefs().setUserId(this@LoginActivity,
             loginRegisterResponse.loginData?.customerDetails?.id
@@ -153,7 +153,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         )
         AppData.ACCESS_TOKEN =
             loginRegisterResponse.loginData?.customerDetails?.accessToken.toString()
-    }
+    }*/
 
   /*  private fun moveToForgotPassword() {
         var intent = Intent(this@LoginActivity, ForgotPasswordActivity::class.java)

@@ -81,18 +81,27 @@ object ApiClient {
 
         //Header Interceptor
         if (!TextUtils.isEmpty(AppData.ACCESS_TOKEN)) {
-            httpClient.addNetworkInterceptor(object : Interceptor {
-                @Throws(IOException::class)
-                override fun intercept(chain: Interceptor.Chain): Response {
-                    val original: Request = chain.request()
-                    val request = original.newBuilder()
-                        .header(ApiConfig.AUTHORIZATION, AppData.ACCESS_TOKEN.trim { it <= ' ' })
-                        .method(original.method, original.body)
-                        .build()
-                    return chain.proceed(request)
-                }
-            })
+            val interceptor  = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+            httpClient.apply {
+                addNetworkInterceptor(object : Interceptor {
+                    @Throws(IOException::class)
+                    override fun intercept(chain: Interceptor.Chain): Response {
+                        val original: Request = chain.request()
+                        val request = original.newBuilder()
+                            .header(
+                                ApiConfig.AUTHORIZATION,
+                                AppData.ACCESS_TOKEN.trim { it <= ' ' })
+                            .method(original.method, original.body)
+                            .build()
+                        return chain.proceed(request)
+                    }
+                })
+                addNetworkInterceptor(interceptor)
+            }
         }
+
+
         val okHttpClient: OkHttpClient = httpClient.build()
         mRetrofit = Retrofit.Builder()
             .baseUrl(apiServerUrl)

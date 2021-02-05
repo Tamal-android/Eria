@@ -17,13 +17,13 @@ class EriaApplication : Application() {
         FirebaseApp.initializeApp(this)
     }
 
-
+/*
     fun saveNewFcmToken(mContext: Context,newFcmToken: String?) {
         appPrefs.setFcmToken(mContext,newFcmToken)
-    }
+    }*/
     companion object {
         val TAG = EriaApplication::class.java.simpleName
-        lateinit var appPrefs: AppPrefs
+        var appPrefs: AppPrefs = AppPrefs()
 
         @get:Synchronized
         var applicationInstance: EriaApplication? = null
