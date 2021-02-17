@@ -4,16 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.*
 import android.text.style.TextAppearanceSpan
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import com.eria.R
-import com.eria.app.AppData
 import com.eria.app.EriaApplication
 import com.eria.data.model.request.LoginReqModel
-import com.eria.data.model.response.LoginRegisterResponse
+import com.eria.data.model.request.RegisterReqModel
+import com.eria.data.model.response.RegisterResponse
+import com.eria.data.model.response.LoginResponse
 import com.eria.data.network.ApiCallback
-import com.eria.data.network.ApiConfig
 import com.eria.databinding.ActivityLoginBinding
 import com.eria.ui.base.BaseActivity
 
@@ -28,8 +29,18 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
         val signup = SpannableString("Create an account Sign Up")
 
-        signup.setSpan(TextAppearanceSpan(this, R.font.roboto_regular), 0, 18, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        signup.setSpan(TextAppearanceSpan(this, R.font.roboto_bold), 19, 25, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        signup.setSpan(
+            TextAppearanceSpan(this, R.font.roboto_regular),
+            0,
+            18,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        signup.setSpan(
+            TextAppearanceSpan(this, R.font.roboto_bold),
+            19,
+            25,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
 
         binding.tvSignUp.setText(signup, TextView.BufferType.SPANNABLE)
 
@@ -43,13 +54,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     }
 
 
+    private fun initClickListener() {
+        binding.btnSendOtp.setOnClickListener(this)
+        binding.tvSignUp.setOnClickListener(this)
 
-
-     private fun initClickListener() {
-         binding.btnSendOtp.setOnClickListener(this)
-         binding.tvSignUp.setOnClickListener(this)
-
-     }
+    }
 
 
     override fun onClick(view: View?) {
@@ -77,10 +86,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                     return
                 }
 
-
                 else -> {
-
-                    moveToOtp()
+                    callLoginApi(
+                        LoginReqModel(
+                            binding.etPhoneNumber.text.toString(),
+                            binding.ccp.selectedCountryCode
+                        )
+                    )
 
                 }
             }
@@ -90,28 +102,41 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     private fun callLoginApi(loginReqModel: LoginReqModel) {
         showProgress(getString(R.string.txt_progress_loading))
         val loginApiCall = getWebService().callLoginApi(loginReqModel)
-        loginApiCall!!.enqueue(object : ApiCallback<LoginRegisterResponse>() {
+        loginApiCall!!.enqueue(object : ApiCallback<LoginResponse>() {
             override fun onFinish() {
                 hideProgress()
             }
-            override fun onSuccess(loginRegisterResponse: LoginRegisterResponse?) {
-                when (loginRegisterResponse?.status) {
-//                    ApiConfig.CALL_SUCCESS -> {
-//                        showToast(loginRegisterResponse.message!!)
-//                      //  saveUserDataInPref(loginRegisterResponse)
-//                        // moveToDashboard()
-//                    }
-//                    ApiConfig.CALL_FAILED_STATUS_0 -> showToast(loginRegisterResponse.message!!)
-//                    ApiConfig.CALL_FAILED_STATUS_2 -> showToast(loginRegisterResponse.message!!)
-//                    ApiConfig.CALL_FAILED_STATUS_3 -> showToast(loginRegisterResponse.message!!)
-//                    ApiConfig.CALL_FAILED_STATUS_4 -> showToast(loginRegisterResponse.message!!)
-//                    ApiConfig.CALL_FAILED_STATUS_5 -> showToast(loginRegisterResponse.message!!)
-                    else -> showToast(getString(R.string.error_something_went_wrong))
+
+            override fun onSuccess(loginResponse: LoginResponse?) {
+                loginResponse?.data?.let { Log.e("ggg", it.toString()) }
+                if (loginResponse?.status == true) {
+                    moveToOtp()
+                    showToast(loginResponse?.message!!)
+                } else {
+                    showToast(getString(R.string.error_something_went_wrong))
                 }
+                /*when  {
+                    (loginResponse.status!!){
+                        moveToOtp()
+                    }
+                    ApiConfig.CALL_SUCCESS -> {
+                      showToast(loginRegisterResponse.message!!)
+                     //  saveUserDataInPref(loginRegisterResponse)
+                       // moveToDashboard()                    }
+                    ApiConfig.CALL_FAILED_STATUS_0 -> showToast(loginRegisterResponse.message!!)                    ApiConfig.CALL_FAILED_STATUS_2 -> showToast(loginRegisterResponse.message!!)
+                    ApiConfig.CALL_FAILED_STATUS_3 -> showToast(loginRegisterResponse.message!!)
+                    ApiConfig.CALL_FAILED_STATUS_4 -> showToast(loginRegisterResponse.message!!)
+                   ApiConfig.CALL_FAILED_STATUS_5 -> showToast(loginRegisterResponse.message!!)
+                    else -> showToast(getString(R.string.error_something_went_wrong))
+                }*/
             }
 
             override fun onFailure(code: Int, msg: String?) {
-                showToast(msg!!)
+                Log.e(this@LoginActivity.javaClass.name,"$msg :$code")
+                if (code==403){
+                    showToast("User not registered")
+                }else
+                    showToast(msg!!)
             }
 
             override fun onThrowable(t: Throwable?) {
@@ -127,13 +152,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         startActivity(intent)
     }
 
-    /*private fun saveUserDataInPref(loginRegisterResponse: LoginRegisterResponse) {
+    private fun saveUserDataInPref(loginResponse: LoginResponse) {
 
         EriaApplication.getPrefs().setUserId(this@LoginActivity,
-            loginRegisterResponse.loginData?.customerDetails?.id
+            Integer.parseInt(loginResponse.data?.user_id!!)
         )
 
-        EriaApplication.getPrefs().setFcmToken(
+       /* EriaApplication.getPrefs().setFcmToken(
             this@LoginActivity,
             loginRegisterResponse.loginData?.customerDetails?.accessToken
         )
@@ -152,23 +177,23 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             loginRegisterResponse.loginData?.customerDetails?.email
         )
         AppData.ACCESS_TOKEN =
-            loginRegisterResponse.loginData?.customerDetails?.accessToken.toString()
-    }*/
+            loginRegisterResponse.loginData?.customerDetails?.accessToken.toString()*/
+    }
 
-  /*  private fun moveToForgotPassword() {
-        var intent = Intent(this@LoginActivity, ForgotPasswordActivity::class.java)
+    /*  private fun moveToForgotPassword() {
+          var intent = Intent(this@LoginActivity, ForgotPasswordActivity::class.java)
+          intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+          overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
+          startActivity(intent)
+      }
+
+
+  */
+    private fun moveToCreateAccount() {
+        var intent = Intent(this@LoginActivity, RegisterActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
         startActivity(intent)
     }
-
-
-*/
-  private fun moveToCreateAccount() {
-      var intent = Intent(this@LoginActivity, RegisterActivity::class.java)
-      intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-      overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
-      startActivity(intent)
-  }
 
 }

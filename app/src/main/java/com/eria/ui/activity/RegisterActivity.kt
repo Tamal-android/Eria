@@ -7,19 +7,14 @@ import android.text.style.TextAppearanceSpan
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.eria.R
-import com.eria.app.AppData
 import com.eria.app.EriaApplication
-import com.eria.data.model.request.LoginReqModel
 import com.eria.data.model.request.RegisterReqModel
-import com.eria.data.model.response.LoginRegisterResponse
+import com.eria.data.model.response.RegisterResponse
 import com.eria.data.network.ApiCallback
-import com.eria.data.network.ApiConfig
 import com.eria.databinding.ActivityRegisterBinding
 import com.eria.ui.base.BaseActivity
-import java.security.AccessController.getContext
 
 
 class RegisterActivity : BaseActivity(), View.OnClickListener {
@@ -86,16 +81,12 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
 
 
                 else -> {
-
-                    //moveToOtp()
-                    binding.ccp.defaultCountryCodeWithPlus
-
                     callRegisterApi(
                         RegisterReqModel(
                             binding.etFullName.text.toString(),
                             binding.etEmail.text.toString(),
                             binding.etPhoneNumber.text.toString(),
-                            binding.ccp.defaultCountryCodeWithPlus
+                            binding.ccp.selectedCountryCode
                         )
                     )
                 }
@@ -106,18 +97,18 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
     private fun callRegisterApi(registerReqModel: RegisterReqModel) {
         showProgress(getString(R.string.txt_progress_loading))
         val loginApiCall = getWebService().callRegisterApi(registerReqModel)
-        loginApiCall!!.enqueue(object : ApiCallback<LoginRegisterResponse>() {
+        loginApiCall!!.enqueue(object : ApiCallback<RegisterResponse>() {
             override fun onFinish() {
                 hideProgress()
             }
 
-            override fun onSuccess(loginRegisterResponse: LoginRegisterResponse?) {
+            override fun onSuccess(registerResponse: RegisterResponse?) {
 
                 //when (loginRegisterResponse?.status) {
-                loginRegisterResponse?.data?.let { Log.e("ggg", it.toString()) }
-                saveUserDataInPref(loginRegisterResponse)
-                showToast(loginRegisterResponse?.message!!)
-                moveToOtp(loginRegisterResponse?.data?.otp)
+                registerResponse?.data?.let { Log.e("ggg", it.toString()) }
+                saveUserDataInPref(registerResponse)
+                showToast(registerResponse?.message!!)
+                moveToOtp(registerResponse?.data?.otp)
 
                 /* ApiConfig.CALL_SUCCESS -> {
                             showToast(loginRegisterResponse.message!!)
@@ -144,25 +135,25 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
-    private fun saveUserDataInPref(loginRegisterResponse: LoginRegisterResponse?) {
+    private fun saveUserDataInPref(registerResponse: RegisterResponse?) {
 
-        Log.e(this.javaClass.name,loginRegisterResponse?.data?.user_id!!)
+        Log.e(this.javaClass.name,registerResponse?.data?.user_id!!)
         EriaApplication.getPrefs().setUserId(
             this@RegisterActivity,
-            Integer.parseInt(loginRegisterResponse?.data?.user_id)
+            Integer.parseInt(registerResponse?.data?.user_id)
         )
 
         EriaApplication.getPrefs().setOTP(
             this@RegisterActivity,
-            loginRegisterResponse?.data?.otp
+            registerResponse?.data?.otp
         )
         EriaApplication.getPrefs().setMobile_no(
             this@RegisterActivity,
-            loginRegisterResponse?.data?.mobeli_no
+            registerResponse?.data?.mobeli_no
         )
         EriaApplication.getPrefs().setUserEmail(
             this@RegisterActivity,
-            loginRegisterResponse?.data?.email
+            registerResponse?.data?.email
         )
 
     }

@@ -11,26 +11,28 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
+import android.location.LocationListener
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.eria.R
 import com.eria.databinding.ActivityLocationBinding
+import com.eria.ui.base.BaseActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.LatLng
 import java.util.*
 
 
-class LocationActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener, android.location.LocationListener {
+class LocationActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
+    GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private lateinit var binding: ActivityLocationBinding
 
     private var googleApiClient: GoogleApiClient? = null
@@ -55,11 +57,19 @@ class LocationActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallback
     // database, but because this is a simplified sample without a full database, we only need the
     // last location to create a Notification if the user navigates away from the app.
     private var currentLocation: Location? = null
+    private var latLng: LatLng? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_location)
+
+        if (intent.getParcelableExtra<LatLng>("latlang")!=null){
+            latLng=intent.getParcelableExtra<LatLng>("latlang")
+
+            binding.etCustomLocation.setText(getAddress(latLng!!))
+        }
+
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         if (ActivityCompat.checkSelfPermission(
@@ -82,8 +92,23 @@ class LocationActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallback
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
         getLocationPermission()
-
         binding.btnMyLocation.setOnClickListener(View.OnClickListener {
+
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                enableLoc()
+            } else {
+                fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
+                    try {
+                        Log.e(this.javaClass.name,"${location?.latitude}+  ${location?.longitude}")
+                        startActivity(Intent(this,MapsActivity::class.java).putExtra("type","location").putExtra("Latitude",location?.latitude).putExtra("Longitude",location?.longitude))
+                    }catch (e: Exception){
+                        e.printStackTrace()
+                    }
+
+                }
+            }
+        })
+        /*binding.btnMyLocation.setOnClickListener(View.OnClickListener {
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 enableLoc()
             } else {
@@ -99,7 +124,7 @@ class LocationActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallback
                 }
             }
 
-        })
+        })*/
 
 
     }
@@ -165,7 +190,7 @@ class LocationActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallback
         }
     }
 
-    private fun getAddress(location: Location): String {
+    private fun getAddress(location: LatLng): String {
         val addresses: List<Address>
         val geocoder = Geocoder(this, Locale.getDefault())
 
@@ -190,7 +215,7 @@ class LocationActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallback
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<out String>,
+        permissions: Array<String?>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -215,7 +240,6 @@ class LocationActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallback
             }
         }
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -240,7 +264,7 @@ class LocationActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallback
                         return
                     }
                     getLocationCallback()
-                    Toast.makeText(this, "Connected 123", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
                 }
                 Activity.RESULT_CANCELED -> Log.d(this.localClassName, "CANCEL")
             }
@@ -289,7 +313,7 @@ class LocationActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallback
                                 // Show the dialog by calling
                                 // startResolutionForResult(),
                                 // and check the result in onActivityResult().
-                                status.startResolutionForResult(this@LocationActivity, 1000)
+                                status.startResolutionForResult(this@LocationActivity, REQUESTLOCATION)
                             } catch (e: IntentSender.SendIntentException) {
                                 // Ignore the error.
                             }

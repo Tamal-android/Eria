@@ -14,8 +14,6 @@ import androidx.databinding.DataBindingUtil
 import com.eria.R
 import com.eria.app.EriaApplication
 import com.eria.data.model.request.OTPReqModel
-import com.eria.data.model.request.RegisterReqModel
-import com.eria.data.model.response.LoginRegisterResponse
 import com.eria.data.model.response.OTPVerifyResponse
 import com.eria.data.network.ApiCallback
 import com.eria.databinding.ActivityOtpBinding
@@ -33,7 +31,8 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_otp)
-        otp=intent.getStringExtra("otp").toString()+"  "+intent.getIntExtra("userId",0).toString()
+        if (intent.getStringExtra("otp").toString()!=null)
+            otp=intent.getStringExtra("otp").toString()+"  "+intent.getIntExtra("userId",0).toString()
         Log.e(this.javaClass.name, otp!!)
         initOtpEditTexts()
        initClickListener()

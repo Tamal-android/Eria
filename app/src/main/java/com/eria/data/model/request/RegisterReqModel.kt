@@ -17,37 +17,3 @@ data class RegisterReqModel (
     @Expose
     var country_code :String
 )
-   /* fun RegisterReqModel(
-        name: String,
-        email: String,
-        mobile_no: String,
-        country_code: String
-    ) {
-        this.name = name
-        this.email = email
-        this.country_code = country_code
-        this.mobile_no = mobile_no
-    }
-
-
-
-    fun RegisterReqModel() {}
-
-    fun get
-    fun getName(): String? {
-        return name
-    }
-
-    fun setName(name: String) {
-        this.name = name
-    }
-
-    fun getEmail(): String? {
-        return email
-    }
-
-    fun setEmail(email: String) {
-        this.email = email
-    }
-
-}*/

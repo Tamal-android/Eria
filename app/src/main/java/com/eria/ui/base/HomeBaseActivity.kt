@@ -199,7 +199,7 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
                     isAddToBackStack = false,
                     isFragmentReplaced = true
                 )
-                Toast.makeText(this,"Working. . .",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Working. . .", Toast.LENGTH_SHORT).show()
             }
             R.id.navigation_search -> {
                 /*showHeader(false)
@@ -210,7 +210,7 @@ class HomeBaseActivity : BaseActivity(), View.OnClickListener,
                     isFragmentReplaced = true
                 )*/
 
-                Toast.makeText(this,"Working. . .",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Working. . .", Toast.LENGTH_SHORT).show()
             }
 
         }

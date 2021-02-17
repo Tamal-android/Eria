@@ -116,6 +116,12 @@ dependencies {
     kapt networkDependencies.moshiKotlinCodegen
     implementation networkDependencies.gson
 
+    //Room
+    implementation roomDatabaseDependency.room_runtime
+    kapt roomDatabaseDependency.kapt_room_compiler
+    implementation roomDatabaseDependency.kapt_room
+    testImplementation roomDatabaseDependency.room_test
+
     //Dagger
     implementation diDependencies.dagger
     kapt diDependencies.daggerCompiler

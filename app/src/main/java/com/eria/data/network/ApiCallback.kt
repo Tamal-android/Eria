@@ -1,6 +1,5 @@
 package com.eria.data.network
 
-import com.eria.data.model.response.LoginRegisterResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

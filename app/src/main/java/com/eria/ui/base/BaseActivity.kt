@@ -20,12 +20,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.annotation.IdRes
+import androidx.room.Room
 import com.dc.dlocation.LocationManager
 import com.dc.dlocation.configuration.Configurations
 import com.dc.dlocation.configuration.LocationConfiguration
 import com.dc.dlocation.listener.LocationListener
 import com.eria.data.network.ApiClient
 import com.eria.data.network.ApiStores
+import com.eria.db_dao.AppDatabase
 
 import java.util.regex.Pattern
 
@@ -42,7 +44,14 @@ open class BaseActivity : AppCompatActivity() {
         )
     }
 
-
+    var db:AppDatabase? = null
+    override fun onStart() {
+        super.onStart()
+        db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "Address_Table"
+        ).build()
+    }
     protected open fun getLocationManager(): LocationManager? {
         return locationManager
     }

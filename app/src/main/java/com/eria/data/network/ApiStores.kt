@@ -3,7 +3,8 @@ package com.eria.data.network
 import com.eria.data.model.request.LoginReqModel
 import com.eria.data.model.request.OTPReqModel
 import com.eria.data.model.request.RegisterReqModel
-import com.eria.data.model.response.LoginRegisterResponse
+import com.eria.data.model.response.LoginResponse
+import com.eria.data.model.response.RegisterResponse
 import com.eria.data.model.response.OTPVerifyResponse
 import retrofit2.Call
 import retrofit2.http.Body
@@ -11,10 +12,10 @@ import retrofit2.http.POST
 
 interface ApiStores : ApiConfig{
     @POST(ApiConfig.API_LOGIN)
-    fun callLoginApi(@Body loginReqModel: LoginReqModel?): Call<LoginRegisterResponse?>?
+    fun callLoginApi(@Body loginReqModel: LoginReqModel?): Call<LoginResponse?>?
 
     @POST(ApiConfig.API_REGISTER)
-    fun callRegisterApi(@Body registerReqModel: RegisterReqModel?): Call<LoginRegisterResponse?>?
+    fun callRegisterApi(@Body registerReqModel: RegisterReqModel?): Call<RegisterResponse?>?
 
     @POST(ApiConfig.API_VERIFY_OTP)
     fun callOTPApi(@Body otpReqModel: OTPReqModel?): Call<OTPVerifyResponse?>?
