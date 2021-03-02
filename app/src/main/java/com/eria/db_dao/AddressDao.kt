@@ -23,4 +23,7 @@ interface AddressDao {
 
     @Delete
     fun delete(addresses: Address)
+
+    @Query("DELETE FROM Address_Table WHERE addressid = :addressId")
+    fun deleteByUserId(addressId: Int)
 }

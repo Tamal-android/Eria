@@ -18,12 +18,13 @@ import com.eria.data.model.response.MenuList
 import com.eria.databinding.FragmentCartBinding
 import com.eria.ui.Interface.CartItemRemove
 import com.eria.ui.adapter.CartAdapter
+import com.eria.ui.base.BaseFragment
 import com.eria.ui.base.HomeBaseActivity
 import com.eria.ui.widget.SwipeController
 import com.eria.ui.widget.SwipeControllerActions
 
 
-class CartFragment : Fragment() {
+class CartFragment : BaseFragment() {
 
     private lateinit var binding: FragmentCartBinding
     private var baseActivity: HomeBaseActivity? = null
@@ -40,6 +41,12 @@ class CartFragment : Fragment() {
         baseActivity = requireActivity() as HomeBaseActivity
     }
 
+    override fun getFragmentActivityReference(activity: HomeBaseActivity) {
+
+        baseActivity?.showHeader(true)
+        baseActivity?.setToolbarTitle("Cart")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,6 +60,7 @@ class CartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         baseActivity?.showHeader(true)
+        baseActivity?.enableBackButton(false)
         baseActivity?.setToolbarTitle("Cart")
         var adapter: CartAdapter? = null
 

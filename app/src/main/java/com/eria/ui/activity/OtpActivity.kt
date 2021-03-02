@@ -3,6 +3,7 @@ package com.eria.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -18,26 +19,54 @@ import com.eria.data.model.response.OTPVerifyResponse
 import com.eria.data.network.ApiCallback
 import com.eria.databinding.ActivityOtpBinding
 import com.eria.ui.base.BaseActivity
-import com.eria.ui.base.HomeBaseActivity
+import java.util.concurrent.TimeUnit
 
 
 class OtpActivity : BaseActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityOtpBinding
     private lateinit var otpEditTexts: Array<AppCompatEditText>
-    var otp:String? = null
+    var otp: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_otp)
-        if (intent.getStringExtra("otp").toString()!=null)
-            otp=intent.getStringExtra("otp").toString()+"  "+intent.getIntExtra("userId",0).toString()
+        if (intent.getStringExtra("otp").toString() != null)
+            otp = intent.getStringExtra("otp").toString() + "  " + intent.getIntExtra("userId", 0)
+                .toString()
         Log.e(this.javaClass.name, otp!!)
         initOtpEditTexts()
-       initClickListener()
+        initClickListener()
+        setOtpTimer()
 
 
+    }
+    private val FORMAT = "%02d:%02d"
+
+    var seconds = 0
+    var minutes:Int = 0
+
+    private fun setOtpTimer() {
+        object : CountDownTimer(30000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                binding.tvResendOtp.isEnabled=false
+                binding.tvResendOtpTimer.text = String.format(
+                    FORMAT,
+                    TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
+                        TimeUnit.MILLISECONDS.toHours(millisUntilFinished)
+                    ),
+                    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
+                    )
+                );
+            }
+
+            override fun onFinish() {
+                binding.tvResendOtp.isEnabled=true
+                binding.tvResendOtpTimer.text = "now!"
+            }
+        }.start()
     }
 
     private fun initClickListener() {
@@ -47,7 +76,13 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
 
     private fun initOtpEditTexts() {
         otpEditTexts =
-            arrayOf(binding.etOtpNo1, binding.etOtpNo2, binding.etOtpNo3, binding.etOtpNo4, binding.etOtpNo5)
+            arrayOf(
+                binding.etOtpNo1,
+                binding.etOtpNo2,
+                binding.etOtpNo3,
+                binding.etOtpNo4,
+                binding.etOtpNo5
+            )
 
         binding.etOtpNo1.addTextChangedListener(OtpTextWatcher(0))
         binding.etOtpNo2.addTextChangedListener(OtpTextWatcher(1))
@@ -157,19 +192,20 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.btn_complete -> {
-                Log.e(this.javaClass.name,EriaApplication.appPrefs.getUserId(this).toString())
-                EriaApplication.getPrefs().getUserId(this@OtpActivity)?.let { OTPReqModel(it,
+                Log.e(this.javaClass.name, EriaApplication.appPrefs.getUserId(this).toString())
+                /*EriaApplication.getPrefs().getUserId(this@OtpActivity)?.let { OTPReqModel(it,
                     otpEditTexts[0].text.toString()+ otpEditTexts[1].text.toString()+ otpEditTexts[2].text.toString()+ otpEditTexts[3].text.toString()+ otpEditTexts[4].text.toString()) }?.let {
                     callOTPApi(
                         it
                     )
-                }
+                }*/
 
+                moveToLocation()
             }
         }
     }
 
-    private fun callOTPApi(otpReqModel : OTPReqModel) {
+    private fun callOTPApi(otpReqModel: OTPReqModel) {
         showProgress(getString(R.string.txt_progress_loading))
         val otpApiCall = getWebService().callOTPApi(otpReqModel)
         otpApiCall!!.enqueue(object : ApiCallback<OTPVerifyResponse>() {
@@ -184,7 +220,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                     otpVerifyResponse?.data?.let { Log.e("ggg", it.toString()) }
                     showToast(otpVerifyResponse?.message!!)
                     if (otpVerifyResponse?.data?.result!!) {
-                       moveToDashBoard()
+                        moveToLocation()
                     }
                 } else showToast(getString(R.string.error_something_went_wrong))
 
@@ -201,12 +237,13 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
-    private fun moveToDashBoard() {
-        var intent = Intent(this@OtpActivity, HomeBaseActivity::class.java)
+    private fun moveToLocation() {
+        var intent = Intent(this@OtpActivity, LocationActivity::class.java)
         overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
         startActivity(intent)
         finish()
     }
+
     override fun onBackPressed() {
         super.onBackPressed()
         finish()

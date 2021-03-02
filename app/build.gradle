@@ -90,7 +90,7 @@ dependencies {
 
     //Image Loading
     implementation imageLoaderDependencies.glide
-    implementation 'androidx.wear:wear:1.0.0'
+    implementation 'androidx.wear:wear:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor imageLoaderDependencies.glideCompiler
 
@@ -103,6 +103,9 @@ dependencies {
     //Other Views
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+
+    def viewPagerVersion = "1.0.0"
+    implementation "androidx.viewpager2:viewpager2:$viewPagerVersion"
 
     //Networking
     implementation networkDependencies.retrofit

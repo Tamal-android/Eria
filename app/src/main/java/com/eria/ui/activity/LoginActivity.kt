@@ -87,12 +87,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 }
 
                 else -> {
-                    callLoginApi(
+                    moveToOtp()
+                    /*callLoginApi(
                         LoginReqModel(
                             binding.etPhoneNumber.text.toString(),
                             binding.ccp.selectedCountryCode
                         )
-                    )
+                    )*/
 
                 }
             }

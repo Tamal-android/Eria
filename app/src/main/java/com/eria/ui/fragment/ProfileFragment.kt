@@ -1,5 +1,6 @@
 package com.eria.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.eria.R
 import com.eria.databinding.FragmentProfileBinding
+import com.eria.ui.activity.AddressActivity
+import com.eria.ui.base.BaseFragment
 import com.eria.ui.base.HomeBaseActivity
 
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : BaseFragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private var baseActivity: HomeBaseActivity? = null
@@ -27,12 +30,23 @@ class ProfileFragment : Fragment() {
         baseActivity = requireActivity() as HomeBaseActivity
     }
 
+    override fun getFragmentActivityReference(activity: HomeBaseActivity) {
+
+       /* this.baseActivity = activity
+        baseActivity?.showHeader(true)
+        baseActivity?.enableBackButton(false)
+        baseActivity?.setToolbarTitle("Profile")*/
+    }
+
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
+        /*baseActivity?.showHeader(true)
+        baseActivity?.enableBackButton(false)
+        baseActivity?.setToolbarTitle("Profile")*/
         return binding.root
     }
 
@@ -40,11 +54,22 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         baseActivity?.showHeader(true)
+        baseActivity?.enableBackButton(false)
         baseActivity?.setToolbarTitle("Profile")
+        binding.tvManageAddress.setOnClickListener(View.OnClickListener {
+            movetoAddressBook()
+        })
 
+        binding.tvOrderDetails.setOnClickListener(View.OnClickListener {
+            baseActivity?.changeFragment(OrderDetailsFragment.newInstance(),isAddToBackStack = true)
+        })
     }
-    override fun onDestroyView() {
-        super.onDestroyView()
-        baseActivity?.showHeader(false)
+
+
+
+    fun movetoAddressBook() {
+        val i = Intent(baseActivity, AddressActivity::class.java)
+        baseActivity!!.overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
+        startActivity(i)
     }
 }

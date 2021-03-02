@@ -36,10 +36,9 @@ class TopPicksAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindItems(_topPicksdata!![position])
         holder.itemView.setOnClickListener(View.OnClickListener {
-            Toast.makeText(mContext!!, "Selected " + _topPicksdata!![position], Toast.LENGTH_SHORT)
-                .show()
+         // _context.showCustomDialog("Order","order")
 
-            mContext.changeFragment(MenuListFragment.newInstance(),isAddToBackStack = true,isFragmentReplaced = false)
+            mContext.changeFragment(MenuListFragment.newInstance(),isAddToBackStack = true)
 
 
         })

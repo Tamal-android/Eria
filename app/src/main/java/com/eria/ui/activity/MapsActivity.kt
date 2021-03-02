@@ -11,7 +11,10 @@ import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -82,7 +85,7 @@ open class MapsActivity : BaseActivity(), OnMapReadyCallback,
         var apiKey = resources.getString(R.string.google_maps_key)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
-
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, apiKey)
         }
@@ -143,6 +146,43 @@ open class MapsActivity : BaseActivity(), OnMapReadyCallback,
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         configureCameraIdle()
+        etTagOther.setOnClickListener(View.OnClickListener {
+        })
+        etTagOther.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent): Boolean {
+                val DRAWABLE_LEFT = 0
+                val DRAWABLE_TOP = 1
+                val DRAWABLE_RIGHT = 2
+                val DRAWABLE_BOTTOM = 3
+                if (event.action == MotionEvent.ACTION_UP) {
+                    if (event.rawX >= etTagOther.right - etTagOther.compoundDrawables[DRAWABLE_RIGHT].bounds.width()
+                    ) {
+                        // your action here
+
+                        removeAddressTagBtnColor()
+
+                        btnTagHome.visibility = View.VISIBLE
+                        btnTagWork.visibility = View.VISIBLE
+                        btnTagHotel.visibility = View.VISIBLE
+                        btnTagOther.visibility = View.VISIBLE
+                        if (etTagOther.text.isNotEmpty()) {
+                            getTagItem = etTagOther.text.toString()
+                        }
+                        return true
+                    }
+                }
+                return false
+            }
+        })
+
+    }
+
+    fun removeAddressTagBtnColor() {
+        etTagOther.visibility = View.GONE
+        btnTagHome.setBackgroundResource(R.drawable.bg_white_background)
+        btnTagWork.setBackgroundResource(R.drawable.bg_white_background)
+        btnTagHotel.setBackgroundResource(R.drawable.bg_white_background)
+        btnTagOther.setBackgroundResource(R.drawable.bg_white_background)
     }
 
     override fun onStart() {
@@ -333,38 +373,35 @@ open class MapsActivity : BaseActivity(), OnMapReadyCallback,
         return false
     }
 
-    /*fun searchLocation(view: View) {
-        val locationSearch: EditText = findViewById<EditText>(R.id.editText)
-        var location: String = locationSearch.text.toString()
-        var addressList: List<Address>? = null
 
-        if (location == "") {
-            Toast.makeText(applicationContext, "provide location", Toast.LENGTH_SHORT).show()
-        }
-        else{
-            val geoCoder = Geocoder(this)
-            try {
-                addressList = geoCoder.getFromLocationName(location, 1)
+    var getTagItem: String = ""
+    fun tagHome(view: View) {
+        removeAddressTagBtnColor()
+        btnTagHome.setBackgroundResource(R.drawable.bg_red_border)
+        getTagItem = "Home"
+    }
 
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-            if (addressList!!.isNotEmpty()){
-                val address = addressList!![0]
-                val latLng = LatLng(address.latitude, address.longitude)
-                map!!.addMarker(MarkerOptions().position(latLng).title(location))
-                map!!.animateCamera(CameraUpdateFactory.newLatLng(latLng))
-                Toast.makeText(
-                    applicationContext,
-                    address.latitude.toString() + " " + address.longitude,
-                    Toast.LENGTH_LONG
-                ).show()
-            }else{
-                Toast.makeText(applicationContext, "No address found", Toast.LENGTH_SHORT).show()
-            }
+    fun tagWork(view: View) {
+        removeAddressTagBtnColor()
+        btnTagWork.setBackgroundResource(R.drawable.bg_red_border)
+        getTagItem = "Work"
+    }
 
-        }
-    }*/
+    fun tagHotel(view: View) {
+        removeAddressTagBtnColor()
+        btnTagHotel.setBackgroundResource(R.drawable.bg_red_border)
+        getTagItem = "Hotel"
+    }
+
+    fun tagOther(view: View) {
+        removeAddressTagBtnColor()
+        btnTagHome.visibility = View.GONE
+        btnTagWork.visibility = View.GONE
+        btnTagHotel.visibility = View.GONE
+        btnTagOther.setBackgroundResource(R.drawable.bg_red_border)
+        etTagOther.visibility = View.VISIBLE
+        getTagItem = "Others"
+    }
 
     fun setLocation(view: View) {
         if (tvSubtitle.text.isNotEmpty() && latLng != null) {
@@ -384,21 +421,25 @@ open class MapsActivity : BaseActivity(), OnMapReadyCallback,
                 } else {
                     if (etAddress.text.toString().isNotEmpty()) {
 
-                        GlobalScope.launch(Dispatchers.IO) {
-                            addressDao.insertAll(
-                                com.eria.db_dao.model.Address(
-                                    etAddress.text.toString(),
-                                    etFloor.text.toString(),
-                                    "",
-                                    latLng!!.latitude.toString(),
-                                    latLng!!.longitude.toString()
+                        if (getTagItem.isNotEmpty()) {
+                            GlobalScope.launch(Dispatchers.IO) {
+                                addressDao.insertAll(
+                                    com.eria.db_dao.model.Address(
+                                        etAddress.text.toString(),
+                                        etFloor.text.toString(),
+                                        getTagItem,
+                                        latLng!!.latitude.toString(),
+                                        latLng!!.longitude.toString()
+                                    )
                                 )
-                            )
-
+                            }
                             val i = Intent(this@MapsActivity, AddressActivity::class.java)
                             i.putExtra("latlang", latLng)
                             overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
                             startActivity(i)
+                        }else{
+                            Toast.makeText(this, "Set Tag for this location", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     } else {
                         etAddress.error = "No Address is set"

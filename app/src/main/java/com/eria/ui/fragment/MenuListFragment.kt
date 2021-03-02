@@ -4,29 +4,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.widget.TextViewCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.eria.R
 import com.eria.data.model.response.MenuList
-import com.eria.data.model.response.TopPicks
 import com.eria.databinding.FragmentMenuListBinding
 import com.eria.ui.Interface.onMenuItemAdd
+import com.eria.ui.adapter.ImageSlideAdaptor
 import com.eria.ui.adapter.MenuListAdapter
+import com.eria.ui.base.BaseFragment
 import com.eria.ui.base.HomeBaseActivity
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import kotlinx.android.synthetic.main.fragment_menu_list.*
 
 
-class MenuListFragment : Fragment() {
+class MenuListFragment : BaseFragment() {
 
     private lateinit var binding: FragmentMenuListBinding
     private var baseActivity: HomeBaseActivity? = null
+    private var currentPosition = 0
 
+    private val fakeSize = 0
+    private val realSize = 0
     companion object {
         fun newInstance(): MenuListFragment {
             return MenuListFragment()
@@ -38,6 +42,14 @@ class MenuListFragment : Fragment() {
         baseActivity = requireActivity() as HomeBaseActivity
     }
 
+    override fun getFragmentActivityReference(activity: HomeBaseActivity) {
+        this.baseActivity = activity
+        baseActivity?.showHeader(false)
+        baseActivity?.enableBackButton(true)
+        baseActivity?.showBottomNavigationBar(false)
+        //baseActivity?.setToolbarTitle("Profile")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,16 +59,66 @@ class MenuListFragment : Fragment() {
         return binding.root
     }
 
+    /*private val pageChangeCallback: OnPageChangeCallback = object : OnPageChangeCallback() {
+        var first = false
+        var last = false
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            if (position == 0)
+            {
+                first = true;
+                last = false;
+            }
+            else if (position == 2)
+            {
+                first = false;
+                last = true;
+            }
+            else
+            {
+                first = false;
+                last = false;
+            }
+        }
+
+        override fun onPageScrollStateChanged(state: Int) {
+            super.onPageScrollStateChanged(state)
+            if (first && state === ViewPager.SCROLL_STATE_IDLE) {
+                // Jump without animation
+                val fragment: Fragment = mainFragmentList.get(mainFragmentList.size() - 1)
+                mainFragmentList.remove(mainFragmentList.size() - 1)
+                mainFragmentList.add(0, fragment)
+                mainPagerAdapter.setData(mainFragmentList)
+                mainPagerAdapter.notifyDataSetChanged()
+                Log.e(TAG, mainFragmentList.toString())
+                mainViewPager.setCurrentItem(1, false)
+            }
+            if (last && state === ViewPager.SCROLL_STATE_IDLE) {
+                // Jump without animation
+                val fragment: Fragment = mainFragmentList.get(0)
+                mainFragmentList.remove(0)
+                mainFragmentList.add(fragment)
+                mainPagerAdapter.setData(mainFragmentList)
+                mainPagerAdapter.notifyDataSetChanged()
+                Log.e(TAG, mainFragmentList.toString())
+                mainViewPager.setCurrentItem(mainFragmentList.size() - 2, false)
+            }
+        }
+    }*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        baseActivity?.showHeader(false)
-        baseActivity?.showBottomNavigationBar(false)
 
         val mAppBarLayout = ablMenuList as AppBarLayout
-        val mTitleText = tv_toolbar_title as AppCompatTextView
-        mTitleText.text = "";
-        mAppBarLayout.addOnOffsetChangedListener(object : OnOffsetChangedListener {
+        val mTitleText = ctlCollapseToolbar as CollapsingToolbarLayout
+        mTitleText.title = "Resturent Name";
+        mTitleText.apply {
+            setCollapsedTitleTypeface(ResourcesCompat.getFont(requireContext(), R.font.roboto_bold))
+            setExpandedTitleTypeface(ResourcesCompat.getFont(requireContext(), R.font.roboto_bold))
+            setCollapsedTitleTextAppearance(R.style.CollapsedAppBar)
+            setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
+        }
+        /*mAppBarLayout.addOnOffsetChangedListener(object : OnOffsetChangedListener {
             var isShow = false
             var scrollRange = -1
             override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
@@ -65,31 +127,36 @@ class MenuListFragment : Fragment() {
                 }
                 if (scrollRange + verticalOffset == 0) {
                     isShow = true
-                    mTitleText.text = "Resturent Name";
+                   // mTitleText.title = "Resturent Name";
                    // showOption(R.id.action_info)
                 } else if (isShow) {
                     isShow = false
-                    mTitleText.text = "";
+                   // mTitleText.title = "Resturent Name";
                     //hideOption(R.id.action_info)
                 }
             }
-        })
+        })*/
 
+        val imageSlideAdapter = ImageSlideAdaptor(baseActivity!!, 3)
+        binding.vpImageSlide.adapter = imageSlideAdapter
+       // binding.vpImageSlide.registerOnPageChangeCallback(pageChangeCallback)
         var adapter: MenuListAdapter? = null
 
         val menuList = ArrayList<MenuList>()
-        adapter = MenuListAdapter(baseActivity!!,menuList,object :onMenuItemAdd{
+        adapter = MenuListAdapter(baseActivity!!, menuList, object : onMenuItemAdd {
             override fun onItemAdded(position: Boolean) {
-                if (position){
-                    binding.btnAddCart.visibility=View.VISIBLE
-                }else{
-                    binding.btnAddCart.visibility=View.GONE
+                if (position) {
+                    binding.btnAddCart.visibility = View.VISIBLE
+                } else {
+                    binding.btnAddCart.visibility = View.GONE
                 }
 
             }
         })
-        binding.includeLayout.rvMenuList!!.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,
-            false)
+        binding.includeLayout.rvMenuList!!.layoutManager = LinearLayoutManager(
+            activity, LinearLayoutManager.VERTICAL,
+            false
+        )
         binding.includeLayout.tvMenuTitle.text = "Menu List"
 
         binding.includeLayout.rvMenuList.adapter = adapter
@@ -105,6 +172,9 @@ class MenuListFragment : Fragment() {
         super.onDestroyView()
         baseActivity!!.setToolbarTitle("")
         baseActivity!!.showBottomNavigationBar(true)
+        baseActivity?.showHeader(false)
+        baseActivity?.setToolbarTitle("")
+        baseActivity?.enableBackButton(false)
     }
 
 }

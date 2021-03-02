@@ -10,11 +10,11 @@
     <!--Production Server-->
     <string name="base_url_api" translatable="false">http://182.73.39.13/projects/era_application/api/</string>
 
-    <!--Image Url-->
+   <!-- &lt;!&ndash;Image Url&ndash;&gt;
     <string name="base_url_img" translatable="false">https://www.airportwinooskicab.com/uploads/</string>
 
-    <!--Cms Url-->
-    <string name="base_url_cms" translatable="false">https://www.airportwinooskicab.com/</string>
+    &lt;!&ndash;Cms Url&ndash;&gt;
+    <string name="base_url_cms" translatable="false">https://www.airportwinooskicab.com/</string>-->
 
 
     <string name="img_vehicles" translatable="false">vehicles/</string>

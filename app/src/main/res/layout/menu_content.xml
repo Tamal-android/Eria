@@ -18,20 +18,190 @@
         android:background="@drawable/background_white_profile"
         android:padding="@dimen/_8sdp"
         android:layout_margin="@dimen/_5sdp">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:textStyle="normal"
+            android:textSize="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:textColor="@color/black_text_color"
+            android:lineSpacingExtra="3sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvresturentDesc"
+            android:text="Arshayan Restaurant"/>
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:textStyle="normal"
+            android:textSize="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:textColor="@color/black_text_color"
+            android:lineSpacingExtra="3sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvresturentDesc"
+            android:text="$ 50"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
+            android:id="@+id/tvresturentDesc"
+            android:textStyle="normal"
+            android:textSize="@dimen/_9sdp"
+            android:drawableStart="@drawable/ic_location"
+            android:drawablePadding="@dimen/_5sdp"
+            android:textColor="@color/black_text_color"
+            android:lineSpacingExtra="3sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/llRestDetails"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. 5896"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/llRestDetails"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_menu_title">
+            <androidx.appcompat.widget.AppCompatRatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rating="4.5"
+                android:progressTint="@color/yellow"
+                style="?android:attr/ratingBarStyleSmall"
+                android:id="@+id/rbFoodRate"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:stepSize="0.5" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:id="@+id/tvRating"
+                android:textStyle="normal"
+                android:textSize="@dimen/_9sdp"
+                android:textColor="@color/black_text_color"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginStart="@dimen/_5sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/rbFoodRate"
+                android:text="4.5 of 5"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:id="@+id/tvOffer"
+                android:textStyle="normal"
+                android:textSize="@dimen/_9sdp"
+                android:textColor="@color/black_text_color"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/tvOfferNo"
+                android:text="Offer : "/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:id="@+id/tvOfferNo"
+                android:textStyle="normal"
+                android:textSize="@dimen/_9sdp"
+                android:textColor="@color/red_text_color"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginStart="@dimen/_5sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:text="20%"/>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:id="@+id/tvDelTime"
+                android:textStyle="normal"
+                android:textSize="@dimen/_9sdp"
+                android:textColor="@color/black_text_color"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:drawableStart="@drawable/ic_clock"
+                android:drawablePadding="@dimen/_8sdp"
+                android:textAlignment="center"
+                app:layout_constraintTop_toBottomOf="@+id/rbFoodRate"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:text="Delivery Time : "/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:id="@+id/tvDeliveryTime"
+                android:textStyle="normal"
+                android:textSize="@dimen/_9sdp"
+                android:textColor="@color/red_text_color"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                app:layout_constraintTop_toBottomOf="@+id/rbFoodRate"
+                app:layout_constraintLeft_toRightOf="@+id/tvDelTime"
+                android:text="2 hr"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:id="@+id/tvCostaText"
+                android:textStyle="normal"
+                android:textSize="@dimen/_9sdp"
+                android:textColor="@color/black_text_color"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:drawableStart="@drawable/ic_dollar_sign"
+                android:drawablePadding="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@+id/tvOffer"
+                app:layout_constraintRight_toLeftOf="@+id/tvCostValue"
+                android:text="Cost Fon : "/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:id="@+id/tvCostValue"
+                android:textStyle="normal"
+                android:textSize="@dimen/_9sdp"
+                android:textColor="@color/red_text_color"
+                android:lineSpacingExtra="3sp"
+                android:layout_marginStart="@dimen/_5sdp"
+                app:layout_constraintTop_toBottomOf="@+id/tvOffer"
+                app:layout_constraintRight_toRightOf="parent"
+                android:text="2"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"
+            android:layout_margin="@dimen/_10sdp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_menu_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_menu_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/roboto_medium"
-            android:paddingLeft="@dimen/_10sdp"
-            android:text="Top Picks For You"
+            android:text="Menu List"
             android:textAlignment="center"
             android:textColor="@color/black_text_color"
             android:textSize="@dimen/_12ssp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/rvMenuList" />
         <!--Recycler View widget-->
         <androidx.recyclerview.widget.RecyclerView

@@ -57,7 +57,20 @@
             android:textAlignment="center"
             android:fontFamily="@font/roboto_regular"
             android:padding="@dimen/_2sdp"
-            android:text="Resent on 00:32"
+            android:text="Resent  : "
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_12ssp"
+            />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_resend_otp_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/clOtpEditText"
+            app:layout_constraintLeft_toRightOf="@+id/tv_resend_otp"
+            android:textAlignment="center"
+            android:fontFamily="@font/roboto_regular"
+            android:padding="@dimen/_2sdp"
+            android:text="00:32"
             android:textColor="@android:color/white"
             android:textSize="@dimen/_12ssp"
             />

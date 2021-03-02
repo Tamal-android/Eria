@@ -10,10 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.eria.R
 import com.eria.databinding.FragmentSearchBinding
 import com.eria.ui.adapter.SearchAdapter
+import com.eria.ui.base.BaseFragment
 import com.eria.ui.base.HomeBaseActivity
 
 
-class SearchFragment : Fragment() {
+class SearchFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSearchBinding
     private var baseActivity: HomeBaseActivity? = null
@@ -27,6 +28,11 @@ class SearchFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         baseActivity = requireActivity() as HomeBaseActivity
+    }
+
+    override fun getFragmentActivityReference(activity: HomeBaseActivity) {
+
+        baseActivity?.showHeader(false)
     }
 
     override fun onCreateView(
@@ -44,6 +50,10 @@ class SearchFragment : Fragment() {
         baseActivity?.showHeader(false)
         var adapter: SearchAdapter? = null
 
+        binding.svSearch.requestFocus();
+        binding.svSearch.setOnClickListener(View.OnClickListener {
+            binding.svSearch.isIconified = false
+        })
         adapter = SearchAdapter(baseActivity!!)
         binding.recyclerviewSearch.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,
             false)

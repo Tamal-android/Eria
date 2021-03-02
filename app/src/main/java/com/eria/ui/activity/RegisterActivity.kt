@@ -81,14 +81,15 @@ class RegisterActivity : BaseActivity(), View.OnClickListener {
 
 
                 else -> {
-                    callRegisterApi(
+                    /*callRegisterApi(
                         RegisterReqModel(
                             binding.etFullName.text.toString(),
                             binding.etEmail.text.toString(),
                             binding.etPhoneNumber.text.toString(),
                             binding.ccp.selectedCountryCode
                         )
-                    )
+                    )*/
+                    moveToOtp("")
                 }
             }
         }

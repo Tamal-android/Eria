@@ -46,7 +46,8 @@
             android:layout_above="@+id/view"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_15sdp"
-            android:src="@drawable/location_mark" />
+            android:src="@drawable/location_mark"
+            android:contentDescription="TODO" />
     </RelativeLayout>
 
     <include layout="@layout/map_location_bottom_sheet" />

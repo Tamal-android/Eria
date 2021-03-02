@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -30,6 +31,7 @@ import kotlinx.android.synthetic.main.address_cart_view.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+
 
 class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListener,
     GoogleApiClient.ConnectionCallbacks, LocationListener {
@@ -85,11 +87,6 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
 
-        /*val db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "Address_Table"
-        ).build()*/
-
     }
 
     override fun onStart() {
@@ -99,15 +96,44 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         loadAddress()
     }
 
-    fun loadAddress() {
+    private fun loadAddress() {
         llAddressContainer!!.removeAllViews()
         GlobalScope.launch(Dispatchers.Main) {
             for (i in addressDao.getAll().indices) {
                 val inflater =
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                 val rowView: View = inflater.inflate(R.layout.address_cart_view, null)
-                rowView.tvTag.text=addressDao.getAll()[i].Tag
-                rowView.tvAddress.text=addressDao.getAll()[i].Address
+                rowView.tag = i
+                rowView.tvTag.text = addressDao.getAll()[i].Tag
+                rowView.tvAddress.text = addressDao.getAll()[i].Address
+                rowView.tvAddress.tag = addressDao.getAll()[i].addressid
+                rowView.ivMore.setOnClickListener(View.OnClickListener {
+                    //Creating the instance of PopupMenu
+                    val popup = PopupMenu(this@AddressActivity, it)
+                    //Inflating the Popup using xml file
+                    popup.menuInflater.inflate(R.menu.address_popup, popup.menu)
+                    //registering popup with OnMenuItemClickListener
+                    popup.setOnMenuItemClickListener { item ->
+                        if (item.itemId == R.id.delete) {
+                            GlobalScope.launch(Dispatchers.IO) {
+                                addressDao.deleteByUserId(rowView.tvAddress.tag as Int)
+                            }
+                            llAddressContainer!!.removeViewAt(
+                                llAddressContainer.indexOfChild(
+                                    rowView
+                                )
+                            )
+                            Toast.makeText(
+                                this@AddressActivity,
+                                "You Delete : " + rowView.tvAddress.tag.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        true
+                    }
+                    popup.show()
+                })
                 llAddressContainer!!.addView(rowView)
                 //  val myView: View = layoutInflater.inflate(R.layout.address_cart_view, null)
             }
@@ -115,13 +141,6 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         }
     }
 
-    fun onDelete(view: View) {
-        llAddressContainer!!.removeView(view.parent as View)
-    }
-
-    fun onAddField(view: View) {
-
-    }
 
     fun addAddress(view: View) {
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {

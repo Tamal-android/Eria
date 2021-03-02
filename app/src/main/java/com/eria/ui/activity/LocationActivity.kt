@@ -23,6 +23,7 @@ import androidx.databinding.DataBindingUtil
 import com.eria.R
 import com.eria.databinding.ActivityLocationBinding
 import com.eria.ui.base.BaseActivity
+import com.eria.ui.base.HomeBaseActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResultCallback
@@ -67,7 +68,7 @@ class LocationActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
         if (intent.getParcelableExtra<LatLng>("latlang")!=null){
             latLng=intent.getParcelableExtra<LatLng>("latlang")
 
-            binding.etCustomLocation.setText(getAddress(latLng!!))
+            binding.etCustomLocation.text = getAddress(latLng!!)
         }
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -100,7 +101,9 @@ class LocationActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
                 fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
                     try {
                         Log.e(this.javaClass.name,"${location?.latitude}+  ${location?.longitude}")
-                        startActivity(Intent(this,MapsActivity::class.java).putExtra("type","location").putExtra("Latitude",location?.latitude).putExtra("Longitude",location?.longitude))
+                        val i=Intent(this,MapsActivity::class.java).putExtra("type","location").putExtra("Latitude",location?.latitude).putExtra("Longitude",location?.longitude)
+                        overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
+                        startActivity(i)
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
@@ -108,15 +111,17 @@ class LocationActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
                 }
             }
         })
-        /*binding.btnMyLocation.setOnClickListener(View.OnClickListener {
+        binding.etCustomLocation.setOnClickListener(View.OnClickListener {
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 enableLoc()
             } else {
                 fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
 
                     try {
-
-                        binding.etCustomLocation?.setText(getAddress(location!!))
+                        Log.e(this.javaClass.name,"${location?.latitude}+  ${location?.longitude}")
+                        val i=Intent(this,MapsActivity::class.java).putExtra("type","location").putExtra("Latitude",location?.latitude).putExtra("Longitude",location?.longitude)
+                        overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
+                        startActivity(i)
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
@@ -124,7 +129,7 @@ class LocationActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
                 }
             }
 
-        })*/
+        })
 
 
     }
@@ -301,7 +306,7 @@ class LocationActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
 
                             Toast.makeText(
                                 this@LocationActivity,
-                                "CONNECTED ACD",
+                                "CONNECTED",
                                 Toast.LENGTH_SHORT
                             ).show()
                             //getLocationCallback()
@@ -347,15 +352,32 @@ class LocationActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
             "onLocationChanged",
             location.latitude.toString() + ",  " + location.longitude.toString()
         )
-        Toast.makeText(
+        /*Toast.makeText(
             this,
             "Location  " + location?.longitude + ",  " + location?.latitude,
             Toast.LENGTH_SHORT
-        ).show()
+        ).show()*/
         location1 = location
     }
 
     override fun onProviderDisabled(provider: String) {
         enableLoc()
+    }
+
+    fun getNearLocation(view: View) {
+        if (latLng != null ){
+            moveToLocation()
+        }else{
+            Toast.makeText(this, "Set location first", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun moveToLocation() {
+        val intent = Intent(this@LocationActivity, HomeBaseActivity::class.java).putExtra(
+            "latlang",
+            latLng
+        )
+        overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
+        startActivity(intent)
+        finish()
     }
 }
