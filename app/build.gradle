@@ -3,12 +3,9 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
-/*
-    id 'com.google.gms.google-services'
-*/
     id 'com.google.firebase.crashlytics'
 }
-
+apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion rootProject.ext.targetSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -18,7 +15,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.eria"
+        applicationId "com.magicmind.eria"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -31,7 +28,7 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix ".dev"
+            //applicationIdSuffix ".dev"
 
             //Defining Log debugging
             buildConfigField "boolean", "LOG_DEBUG_MODE", "true"
@@ -133,7 +130,9 @@ dependencies {
     implementation diDependencies.daggerSupport
 
     //Firebase
-    implementation platform('com.google.firebase:firebase-bom:25.12.0')
+    implementation platform('com.google.firebase:firebase-bom:26.6.0')
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation firebaseDependencies.crashlyticsKtx
     implementation firebaseDependencies.analyticsKtx
     implementation firebaseDependencies.fcmKtx

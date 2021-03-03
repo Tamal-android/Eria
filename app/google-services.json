@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "300549676065",
+    "project_id": "eiria-project",
+    "storage_bucket": "eiria-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300549676065:android:59441664c96c000213d760",
+        "android_client_info": {
+          "package_name": "com.magicmind.eria"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "300549676065-4fl5g5t0184u1v1dqf4gc66kt0pt7psm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAey1xtx0nnRkNt3PWFNoNlzKQjpw1LNik"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "300549676065-4fl5g5t0184u1v1dqf4gc66kt0pt7psm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

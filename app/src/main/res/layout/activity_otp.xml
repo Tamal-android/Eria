@@ -122,14 +122,14 @@
                 app:layout_constraintLeft_toRightOf="@+id/etOtpNo3"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <!--<androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etOtpNo5"
                 style="@style/OtpEditTextStyle"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:imeOptions="actionDone"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toRightOf="@+id/etOtpNo4"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

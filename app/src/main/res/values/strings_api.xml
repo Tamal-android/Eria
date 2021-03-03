@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--Staging Server-->
-
-    <!-- <string name="base_url_api" translatable="false">http://182.73.39.13/projects/vtcab/api/</string>
-     &lt;!&ndash;Image Url&ndash;&gt;
-     <string name="base_url_img" translatable="false">http://182.73.39.13/projects/vtcab/uploads/</string>-->
-
     <!--Production Server-->
-    <string name="base_url_api" translatable="false">http://182.73.39.13/projects/era_application/api/</string>
-
-   <!-- &lt;!&ndash;Image Url&ndash;&gt;
-    <string name="base_url_img" translatable="false">https://www.airportwinooskicab.com/uploads/</string>
-
-    &lt;!&ndash;Cms Url&ndash;&gt;
-    <string name="base_url_cms" translatable="false">https://www.airportwinooskicab.com/</string>-->
+<!--    <string name="base_url_api" translatable="false">http://182.73.39.13/projects/restaurant/api/</string>-->
+    <string name="base_url_api" translatable="false">http://192.168.1.78:8000/api/</string>
 
 
     <string name="img_vehicles" translatable="false">vehicles/</string>
