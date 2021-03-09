@@ -24,7 +24,7 @@
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
                 android:id="@+id/ctlCollapseToolbar"
                 app:contentScrim="?attr/colorPrimary"
@@ -66,12 +66,18 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+
+
         <include
             android:id="@+id/includeLayout"
             layout="@layout/menu_content"
+            app:layout_dodgeInsetEdges="top"
             app:layout_anchor="@+id/ablMenuList"
-            app:layout_anchorGravity="clip_vertical"
-            app:layout_dodgeInsetEdges="top"/>
+            app:layout_anchorGravity="clip_vertical"/>
+
+
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

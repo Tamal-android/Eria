@@ -2,6 +2,8 @@ package com.magicmind.eria.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.magicmind.eria.R
@@ -20,10 +27,13 @@ import com.magicmind.eria.data.model.response.MenuList
 import com.magicmind.eria.databinding.FragmentMenuListBinding
 import com.magicmind.eria.ui.adapter.ImageSlideAdaptor
 import com.magicmind.eria.ui.adapter.MenuListAdapter
+import com.magicmind.eria.ui.adapter.SliderAdapter
 import com.magicmind.eria.ui.base.BaseFragment
 import com.magicmind.eria.ui.base.HomeBaseActivity
 import com.magicmind.eria.ui.viewModel.MenuItemViewModel
+import com.magicmind.eria.ui.viewModel.Slider
 import kotlinx.android.synthetic.main.fragment_menu_list.*
+import kotlin.math.abs
 
 
 class MenuListFragment : BaseFragment() {
@@ -115,10 +125,11 @@ class MenuListFragment : BaseFragment() {
     }*/
 
     var itemCount:Int=0
+    val handler = Handler(Looper.getMainLooper())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        var origPosition: Int = 0
         val mAppBarLayout = ablMenuList as AppBarLayout
         val mTitleText = ctlCollapseToolbar as CollapsingToolbarLayout
         mTitleText.title = "Resturent Name";
@@ -129,8 +140,27 @@ class MenuListFragment : BaseFragment() {
             setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
         }
 
-        val imageSlideAdapter = ImageSlideAdaptor(baseActivity!!, 3)
-        binding.vpImageSlide.adapter = imageSlideAdapter
+//        val imageSlideAdapter = ImageSlideAdaptor(baseActivity!!, 3)
+//        binding.vpImageSlide.adapter = imageSlideAdapter
+//        binding.vpImageSlide.setCurrentItem(binding.vpImageSlide.getChildCount() * 1000 / 2, false)
+        /*binding.vpImageSlide.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                handler.removeMessages(0)
+
+                val runnable = Runnable {
+                    binding.vpImageSlide.currentItem = ++binding.vpImageSlide.currentItem
+                }
+                if (position < binding.vpImageSlide.adapter?.itemCount ?: 0) {
+                    handler.postDelayed(runnable, 1000)
+                }
+            }
+        })*/
+
+
+        implementSlider(listOf(Slider(R.raw.on_board_img1_land)))
        // binding.vpImageSlide.registerOnPageChangeCallback(pageChangeCallback)
         var adapter: MenuListAdapter? = null
 
@@ -172,7 +202,33 @@ class MenuListFragment : BaseFragment() {
         adapter.notifyDataSetChanged()
 
     }
+    private val runnable = Runnable {
+        binding.vpImageSlide.currentItem = binding.vpImageSlide.currentItem + 1
+    }
 
+    private fun implementSlider(sliders: List<Slider>) {
+        val sliderAdapter = SliderAdapter( sliders,binding.vpImageSlide)
+        binding.vpImageSlide.adapter = sliderAdapter
+        binding.vpImageSlide.clipToPadding = false
+        binding.vpImageSlide.clipChildren = false
+        binding.vpImageSlide.offscreenPageLimit = 3
+        binding.vpImageSlide.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        binding.vpImageSlide.setCurrentItem(0, false)
+        val compositePageTransformer = CompositePageTransformer()
+        compositePageTransformer.addTransformer(MarginPageTransformer(10))
+        compositePageTransformer.addTransformer { page: View, position: Float ->
+            val r = 1 - abs(position)
+            page.scaleY = 0.85f + r * 0.15f
+        }
+        binding.vpImageSlide.setPageTransformer(compositePageTransformer)
+        binding.vpImageSlide.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                handler.removeCallbacks(runnable)
+                handler.postDelayed(runnable, 4000)
+            }
+        })
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         baseActivity!!.setToolbarTitle("")

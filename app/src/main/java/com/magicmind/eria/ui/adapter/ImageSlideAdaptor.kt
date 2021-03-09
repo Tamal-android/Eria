@@ -15,4 +15,6 @@ class ImageSlideAdaptor(activity: HomeBaseActivity, private val itemsCount: Int)
     override fun createFragment(position: Int): Fragment {
         return ViewPagerFragment.newInstance(position)
     }
+
+
 }
