@@ -22,7 +22,7 @@ open class DPrefs() {
 
     protected fun setString(mContext: Context,key: String, value: String) {
         val sharedPreferences = mContext.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
-        sharedPreferences.edit().putString(key, getEncryptedData(value)).apply()
+        sharedPreferences.edit().putString(key, value).apply()
     }
 
     /**

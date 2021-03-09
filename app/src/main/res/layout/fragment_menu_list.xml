@@ -2,7 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <data>
+        <variable
+            name="viewModel"
+            type="com.magicmind.eria.ui.viewModel.MenuItemViewModel" />
+        <variable
+            name="view"
+            type="android.view.View" />
+    </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -63,20 +70,36 @@
             android:id="@+id/includeLayout"
             layout="@layout/menu_content"
             app:layout_anchor="@+id/ablMenuList"
-            app:layout_anchorGravity="bottom" />
+            app:layout_anchorGravity="clip_vertical"
+            app:layout_dodgeInsetEdges="top"/>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_anchor="@+id/includeLayout"
             app:layout_anchorGravity="bottom"
-            android:layout_gravity="bottom"
-            android:background="@color/colorPrimaryDark">
+            android:layout_gravity="bottom">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/btnAddCart"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:backgroundTint="@color/colorAccent"
+                android:background="@drawable/bg_red_curved"
+                android:text="Menu"
+                android:padding="@dimen/_5sdp"
+                android:textColor="@color/white"
+                android:drawableStart="@drawable/ic_menu"
+                app:iconTint="@color/white"
+                android:id="@+id/btnMenuSort"/>
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="@dimen/_280sdp"
             android:layout_height="wrap_content"
             android:id="@+id/btnAddCart"
             android:text="Go TO CART"
-            android:visibility="gone"
             android:textColor="@color/white"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

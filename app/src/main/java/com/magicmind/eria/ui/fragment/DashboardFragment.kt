@@ -1,21 +1,25 @@
 package com.magicmind.eria.ui.fragment
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.magicmind.eria.R
 import com.magicmind.eria.data.model.response.TopPicks
-import com.magicmind.eria.data.model.response.TopPicksResponse
 import com.magicmind.eria.databinding.FragmentDashboardBinding
 import com.magicmind.eria.ui.activity.LocationActivity
+import com.magicmind.eria.ui.activity.MapsActivity
 import com.magicmind.eria.ui.adapter.TopBrandsAdapter
 import com.magicmind.eria.ui.adapter.TopFoodsAdapter
 import com.magicmind.eria.ui.adapter.TopPicksAdapter
@@ -57,8 +61,11 @@ class DashboardFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         baseActivity?.showHeader(false)
+
         if (baseActivity!!.latLng!=null)
-            binding.tvTitle.text = baseActivity!!.getAddress(baseActivity!!.latLng!!)
+            binding.tvTitle.text = baseActivity!!.getAddress(baseActivity!!.latLng!!,null)
+        if (baseActivity!!.location1!=null)
+            binding.tvTitle.text = baseActivity!!.getAddress(null,baseActivity!!.location1!!)
         binding.tvTitle.isSelected = true;
         binding.tvTitle.ellipsize = TextUtils.TruncateAt.END;
         binding.tvTitle.setHorizontallyScrolling(true);
@@ -83,7 +90,11 @@ class DashboardFragment : BaseFragment() {
             )
         }
         binding.tvTitle.setOnClickListener(View.OnClickListener {
-            moveToLocation()
+            if (!baseActivity?.locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                baseActivity?.enableLoc()
+            }else{
+                moveToLocation()
+            }
         })
 
         binding.svSearch.setOnClickListener(View.OnClickListener {
@@ -125,9 +136,47 @@ class DashboardFragment : BaseFragment() {
     }
 
     private fun moveToLocation() {
-        var intent = Intent(baseActivity, LocationActivity::class.java)
+        /*var intent = Intent(baseActivity, MapsActivity::class.java)
         baseActivity?.overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
-        startActivity(intent)
+        startActivity(intent)*/
+        if (ActivityCompat.checkSelfPermission(
+                baseActivity!!,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                baseActivity!!,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        baseActivity?.fusedLocationProviderClient!!.lastLocation.addOnSuccessListener { location: Location? ->
+            if (location==null){
+                baseActivity?.enableLoc()
+            }else {
+
+                try {
+                    Log.e(this.javaClass.name, "${location?.latitude}+  ${location?.longitude}")
+                    val i =
+                        Intent(baseActivity, MapsActivity::class.java).putExtra("type", "location")
+                            .putExtra("Latitude", location?.latitude)
+                            .putExtra("Longitude", location?.longitude)
+                    baseActivity?.overridePendingTransition(
+                        R.anim.popup_in_anim,
+                        R.anim.popup_out_anim
+                    )
+                    startActivity(i)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
     }
 
 }

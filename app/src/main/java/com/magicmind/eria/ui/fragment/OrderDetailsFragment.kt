@@ -1,6 +1,7 @@
 package com.magicmind.eria.ui.fragment
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -41,10 +42,6 @@ class OrderDetailsFragment : BaseFragment() {
 
     override fun getFragmentActivityReference(activity: HomeBaseActivity) {
         this.baseActivity = activity
-        baseActivity?.enableBackButton(true)
-        baseActivity?.showBottomNavigationBar(false)
-        baseActivity?.showHeader(true)
-        baseActivity?.setToolbarTitle("Order Details")
     }
 
     override fun onCreateView(
@@ -62,7 +59,9 @@ class OrderDetailsFragment : BaseFragment() {
         baseActivity?.enableBackButton(true)
         baseActivity?.showBottomNavigationBar(false)
         baseActivity?.showHeader(true)
+        baseActivity?.changeHeaderColor(R.color.white)
         baseActivity?.setToolbarTitle("Order Details")
+        baseActivity?.setToolbarTextColor(Color.BLACK)
 
         addOrderLayout()
 
@@ -74,13 +73,6 @@ class OrderDetailsFragment : BaseFragment() {
             val inflater =
                 baseActivity?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val rowView: View = inflater.inflate(R.layout.order_item_layout, null)
-            /*rowView.tag = i
-            rowView.tvOrder_Id.text = ""
-            rowView.tvOrder_price.text = ""
-            rowView.tvOrder_date.text = ""
-            rowView.tvOrder_items_count.text = ""
-            rowView.tvDelevaryStatus.text = ""
-            rowView.tv_Order_Repeat.text = ""*/
             rowView.llItem_Details.removeAllViews()
             for (j in 0..3){
                 val inflater1 =
@@ -89,7 +81,7 @@ class OrderDetailsFragment : BaseFragment() {
                 rowView.llItem_Details.addView(sub_rowView)
             }
             rowView.btn_rate_order.setOnClickListener(View.OnClickListener {
-
+                baseActivity?.showCustomDialog("Rating and Review","rate")
             })
             binding.llOrderDetailsContainer.addView(rowView)
             //  val myView: View = layoutInflater.inflate(R.layout.address_cart_view, null)

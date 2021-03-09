@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/cvcontainer"
     android:padding="@dimen/_2sdp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,6 +45,14 @@
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/_8ssp"/>
         </LinearLayout>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toLeftOf="@+id/ivMore"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/cbAddressSelect"
+            android:layout_marginEnd="@dimen/_8sdp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
         <ImageView
             android:layout_width="0dp"
             android:layout_height="wrap_content"

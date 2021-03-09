@@ -13,15 +13,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import com.magicmind.eria.R
-import com.magicmind.eria.databinding.ActivityMapsBinding
-import com.magicmind.eria.db_dao.AddressDao
-import com.magicmind.eria.ui.base.BaseActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
@@ -43,6 +40,11 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.magicmind.eria.R
+import com.magicmind.eria.databinding.ActivityMapsBinding
+import com.magicmind.eria.db_dao.AddressDao
+import com.magicmind.eria.ui.base.BaseActivity
+import com.magicmind.eria.ui.base.HomeBaseActivity
 import kotlinx.android.synthetic.main.map_location_bottom_sheet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -51,7 +53,7 @@ import java.io.IOException
 import java.util.*
 
 
-open class MapsActivity : BaseActivity(), OnMapReadyCallback,
+class MapsActivity : BaseActivity(), OnMapReadyCallback,
     GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener {
 
@@ -72,6 +74,8 @@ open class MapsActivity : BaseActivity(), OnMapReadyCallback,
     private lateinit var binding: ActivityMapsBinding
 
     private lateinit var addressDao: AddressDao
+
+    var mapView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,6 +148,8 @@ open class MapsActivity : BaseActivity(), OnMapReadyCallback,
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
+
+        mapView = mapFragment.view;
         mapFragment.getMapAsync(this)
         configureCameraIdle()
         etTagOther.setOnClickListener(View.OnClickListener {
@@ -250,6 +256,21 @@ open class MapsActivity : BaseActivity(), OnMapReadyCallback,
                 //.snippet("Latitude: " + latLng.latitude + "; Longitude: " + latLng.longitude)
             )
         })
+
+        if (mapView != null &&
+            mapView!!.findViewById<View?>("1".toInt()) != null
+        ) {
+            // Get the button view
+            val locationButton =
+                (mapView!!.findViewById<View>("1".toInt()).parent as View).findViewById<View>("2".toInt())
+            // and next place it, on bottom right (as Google Maps app)
+            val layoutParams: RelativeLayout.LayoutParams =
+                locationButton.layoutParams as RelativeLayout.LayoutParams
+            // position on right bottom
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+            layoutParams.setMargins(0, 0, 80, 0)
+        }
     }
 
     private fun configureCameraIdle(): LatLng? {
@@ -406,13 +427,20 @@ open class MapsActivity : BaseActivity(), OnMapReadyCallback,
     fun setLocation(view: View) {
         if (tvSubtitle.text.isNotEmpty() && latLng != null) {
             if (type == "location") {
+                val intent = Intent(this@MapsActivity, HomeBaseActivity::class.java).putExtra(
+                    "latlang",
+                    latLng
+                )
                 overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
+                startActivity(intent)
+                finish()
+                /*overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
                 startActivity(
                     Intent(this, LocationActivity::class.java).putExtra(
                         "latlang",
                         latLng
                     )
-                )
+                )*/
             } else if (type == "address") {
 
                 if (llAddressContainer.visibility == View.GONE) {

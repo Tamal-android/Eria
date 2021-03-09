@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -17,18 +18,20 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.magicmind.eria.R
 import com.magicmind.eria.databinding.ActivityLocationBinding
-import com.magicmind.eria.ui.base.BaseActivity
 import com.magicmind.eria.ui.base.HomeBaseActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.magicmind.eria.ui.base.BaseActivity
 import java.util.*
 
 
@@ -82,13 +85,7 @@ class LocationActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             getLocationPermission()
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return
         }
 
@@ -210,11 +207,11 @@ class LocationActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
         val address: String =
             addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
-        val city: String = addresses[0].getLocality()
-        val state: String = addresses[0].getAdminArea()
-        val country: String = addresses[0].getCountryName()
-        val postalCode: String = addresses[0].getPostalCode()
-        val knownName: String = addresses[0].getFeatureName() // Only if available else return NULL
+        val city: String = addresses[0].locality
+        val state: String = addresses[0].adminArea
+        val country: String = addresses[0].countryName
+        val postalCode: String = addresses[0].postalCode
+        val knownName: String = addresses[0].featureName // Only if available else return NULL
 
         return address;
     }
@@ -241,10 +238,25 @@ class LocationActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
                     }
                 } else {
                     Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+                    locationAlertDialog()
                 }
                 return
             }
         }
+    }
+
+    fun locationAlertDialog(){
+        MaterialAlertDialogBuilder(this@LocationActivity,R.style.AlertDialogTheme)
+            .setTitle("Location Denied")
+            .setMessage("Lorem ipsum dolor ....")
+            .setPositiveButton("Ok", DialogInterface.OnClickListener { dialog, which ->
+                getLocationPermission()
+            })
+            .setNeutralButton("Cancel", DialogInterface.OnClickListener { dialog, which ->
+                dialog.dismiss()
+                finishAffinity()
+            })
+            .show();
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

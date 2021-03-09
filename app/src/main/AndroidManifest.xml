@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+
     <application
         android:name=".app.EriaApplication"
         android:allowBackup="true"
@@ -22,8 +23,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
         android:usesCleartextTraffic="true">
         <activity android:name=".ui.activity.LocationActivity"/>
-        <activity android:name=".ui.activity.AddressActivity">
-        </activity>
+        <activity android:name=".ui.activity.AddressActivity"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

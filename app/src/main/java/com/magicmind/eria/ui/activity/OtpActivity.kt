@@ -2,17 +2,21 @@ package com.magicmind.eria.ui.activity
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.databinding.DataBindingUtil
 import com.magicmind.eria.R
+import com.magicmind.eria.app.AppData
 import com.magicmind.eria.app.EriaApplication
 import com.magicmind.eria.data.model.request.OTPReqModel
 import com.magicmind.eria.data.model.response.OTPVerifyResponse
@@ -188,18 +192,58 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
 
     }
 
+    fun getDeviceId(context: Context): String? {
+        val deviceId: String = Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
+        return deviceId
+    }
+    fun getDeviceName(): String? {
+        val manufacturer = Build.MANUFACTURER
+        val model = Build.MODEL
+        return if (model.startsWith(manufacturer)) {
+            capitalize(model)
+        } else {
+            capitalize(manufacturer) + " " + model
+        }
+    }
+
+
+    private fun capitalize(s: String?): String {
+        if (s == null || s.length == 0) {
+            return ""
+        }
+        val first = s[0]
+        return if (Character.isUpperCase(first)) {
+            s
+        } else {
+            Character.toUpperCase(first).toString() + s.substring(1)
+        }
+    }
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.btn_complete -> {
-                Log.e(this.javaClass.name, EriaApplication.appPrefs.getUserId(this).toString())
-                /*EriaApplication.getPrefs().getUserId(this@OtpActivity)?.let { OTPReqModel(it,
-                    otpEditTexts[0].text.toString()+ otpEditTexts[1].text.toString()+ otpEditTexts[2].text.toString()+ otpEditTexts[3].text.toString()) }?.let {
-                    callOTPApi(
-                        it
-                    )
-                }*/
+                Log.e(this.javaClass.name,  EriaApplication.getPrefs().getMobile_no(this@OtpActivity)!!)
 
-                moveToLocation()
+                if (isConnected(this)) {
+                    EriaApplication.getPrefs().getMobile_no(this@OtpActivity)?.let {
+                        callOTPApi(
+                            OTPReqModel(
+                                it,
+                                otpEditTexts[0].text.toString() + otpEditTexts[1].text.toString() + otpEditTexts[2].text.toString() + otpEditTexts[3].text.toString(),
+                                getDeviceId(this)!!,
+                                getDeviceName()!!,
+                                "Android",
+                                EriaApplication.appPrefs.getFcmToken(this)!!
+                            )
+                        )
+                    }
+
+                }else{
+                    showError(getString(R.string.no_internet))
+                }
+                //moveToLocation()
             }
         }
     }
@@ -212,16 +256,19 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                 hideProgress()
             }
 
-            override fun onSuccess(otpVerifyResponse: OTPVerifyResponse?) {
+            override fun onSuccess(model: OTPVerifyResponse?) {
+                Toast.makeText(this@OtpActivity,model?.message,Toast.LENGTH_LONG).show()
+                if (model?.status == false){
+                    saveUserDataInPref(model)
+                    moveToLocation()
 
-                if (otpVerifyResponse?.status!!) {
-                    //when (loginRegisterResponse?.status) {
-                    otpVerifyResponse?.data?.let { Log.e("ggg", it.toString()) }
-                    showToast(otpVerifyResponse?.message!!)
-                    if (otpVerifyResponse?.data?.result!!) {
-                        moveToLocation()
-                    }
-                } else showToast(getString(R.string.error_something_went_wrong))
+                }else{
+                    EriaApplication.getPrefs().setUserLoggedIn(
+                        this@OtpActivity,
+                        false
+                    )
+                }
+
 
             }
 
@@ -236,6 +283,35 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
+    private fun saveUserDataInPref(otpVerifyResponse: OTPVerifyResponse) {
+
+            EriaApplication.getPrefs().setMobile_no(
+                this@OtpActivity,
+                otpVerifyResponse.data?.user!!.mobile
+            )
+
+            EriaApplication.getPrefs().setBEARER_TOKEN(
+            this@OtpActivity,
+                otpVerifyResponse.data?.token
+        )
+
+        EriaApplication.getPrefs().setUserId(
+            this@OtpActivity,
+            otpVerifyResponse.data?.user?.userId
+        )
+
+        EriaApplication.getPrefs().setSTATUS(
+            this@OtpActivity,
+            otpVerifyResponse.data?.user?.status
+        )
+        EriaApplication.getPrefs().setUserLoggedIn(
+            this@OtpActivity,
+            true
+        )
+
+        AppData.ACCESS_TOKEN =
+            otpVerifyResponse?.data?.token!!
+    }
     private fun moveToLocation() {
         var intent = Intent(this@OtpActivity, LocationActivity::class.java)
         overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)

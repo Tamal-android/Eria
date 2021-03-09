@@ -1,4 +1,3 @@
-include ':dlocation'
 include ':countrycodepicker'
 include ':app'
 rootProject.name = "Eria"

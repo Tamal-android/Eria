@@ -5,8 +5,11 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 class LoginResponse : BaseResponse<LoginDataModel>()
-data class LoginDataModel (
-    @SerializedName("user_id")
+data class LoginDataModel(
+    @SerializedName("body")
     @Expose
-    val user_id: String?=null
+    val body: String? = null,
+    @SerializedName("to")
+    @Expose
+    val mobile_no: String? = null
 )

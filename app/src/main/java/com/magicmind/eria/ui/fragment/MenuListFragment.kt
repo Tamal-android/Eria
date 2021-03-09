@@ -1,34 +1,37 @@
 package com.magicmind.eria.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager.widget.ViewPager
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.magicmind.eria.R
 import com.magicmind.eria.data.model.response.MenuList
 import com.magicmind.eria.databinding.FragmentMenuListBinding
-import com.magicmind.eria.ui.Interface.onMenuItemAdd
 import com.magicmind.eria.ui.adapter.ImageSlideAdaptor
 import com.magicmind.eria.ui.adapter.MenuListAdapter
 import com.magicmind.eria.ui.base.BaseFragment
 import com.magicmind.eria.ui.base.HomeBaseActivity
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.magicmind.eria.ui.viewModel.MenuItemViewModel
 import kotlinx.android.synthetic.main.fragment_menu_list.*
 
 
 class MenuListFragment : BaseFragment() {
 
-    private lateinit var binding: FragmentMenuListBinding
+    lateinit var binding: FragmentMenuListBinding
     private var baseActivity: HomeBaseActivity? = null
     private var currentPosition = 0
-
+    private var menuItemViewModel: MenuItemViewModel?=null
     private val fakeSize = 0
     private val realSize = 0
     companion object {
@@ -44,9 +47,7 @@ class MenuListFragment : BaseFragment() {
 
     override fun getFragmentActivityReference(activity: HomeBaseActivity) {
         this.baseActivity = activity
-        baseActivity?.showHeader(false)
-        baseActivity?.enableBackButton(true)
-        baseActivity?.showBottomNavigationBar(false)
+
         //baseActivity?.setToolbarTitle("Profile")
     }
 
@@ -56,6 +57,13 @@ class MenuListFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_menu_list, container, false)
+            menuItemViewModel = ViewModelProviders.of(this).get(MenuItemViewModel::class.java)
+            //lifecycleOwner = viewLifecycleOwner
+            binding.viewModel = menuItemViewModel
+
+        baseActivity?.showHeader(false)
+        baseActivity?.enableBackButton(true)
+        baseActivity?.showBottomNavigationBar(false)
         return binding.root
     }
 
@@ -106,6 +114,8 @@ class MenuListFragment : BaseFragment() {
         }
     }*/
 
+    var itemCount:Int=0
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -118,24 +128,6 @@ class MenuListFragment : BaseFragment() {
             setCollapsedTitleTextAppearance(R.style.CollapsedAppBar)
             setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
         }
-        /*mAppBarLayout.addOnOffsetChangedListener(object : OnOffsetChangedListener {
-            var isShow = false
-            var scrollRange = -1
-            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.totalScrollRange
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    isShow = true
-                   // mTitleText.title = "Resturent Name";
-                   // showOption(R.id.action_info)
-                } else if (isShow) {
-                    isShow = false
-                   // mTitleText.title = "Resturent Name";
-                    //hideOption(R.id.action_info)
-                }
-            }
-        })*/
 
         val imageSlideAdapter = ImageSlideAdaptor(baseActivity!!, 3)
         binding.vpImageSlide.adapter = imageSlideAdapter
@@ -143,16 +135,29 @@ class MenuListFragment : BaseFragment() {
         var adapter: MenuListAdapter? = null
 
         val menuList = ArrayList<MenuList>()
-        adapter = MenuListAdapter(baseActivity!!, menuList, object : onMenuItemAdd {
-            override fun onItemAdded(position: Boolean) {
-                if (position) {
-                    binding.btnAddCart.visibility = View.VISIBLE
-                } else {
-                    binding.btnAddCart.visibility = View.GONE
-                }
+        adapter = MenuListAdapter(baseActivity!!, binding, menuList)
 
+        menuItemViewModel?.count?.observe(viewLifecycleOwner, Observer {
+            Log.e("OBSERVER", it.toString())
+            if (it > 0) {
+                binding.btnAddCart.visibility = View.VISIBLE
+                binding.btnAddCart.text = "${it.toString()} Item Added : GO TO CART."
+            } else {
+                binding.btnAddCart.visibility = View.GONE
             }
         })
+        binding.btnMenuSort.setOnClickListener(View.OnClickListener {
+            val wrapper: Context = ContextThemeWrapper(context, R.style.PopupMenu)
+            val popup = PopupMenu(wrapper, it)//Inflating the Popup using xml file
+            popup.menuInflater.inflate(R.menu.item_catagory, popup.menu)
+            popup.menu.add("Appetizer")
+            popup.menu.add("Starter")
+            popup.menu.add("Main Course")
+            popup.menu.add("Desert")
+            popup.show()
+        })
+
+
         binding.includeLayout.rvMenuList!!.layoutManager = LinearLayoutManager(
             activity, LinearLayoutManager.VERTICAL,
             false

@@ -2,17 +2,16 @@ package com.magicmind.eria.ui.activity
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.*
 import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
-import android.text.style.TextAppearanceSpan
-import android.text.style.UnderlineSpan
+import android.text.style.*
 import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.magicmind.eria.R
 import com.magicmind.eria.app.EriaApplication
@@ -31,7 +30,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         val SpanString = SpannableString(
-            "By Registering you agree to the Terms of Use and Privacy Policy"
+            "By Registering you agree to our Terms of Use and Privacy Policy"
         )
         val signup = SpannableString("Create an account Sign Up")
 
@@ -76,10 +75,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
         SpanString.setSpan(teremsAndCondition, 32, 45, 0)
         SpanString.setSpan(privacy, 49, 63, 0)
-        SpanString.setSpan(ForegroundColorSpan(Color.BLUE), 32, 45, 0)
-        SpanString.setSpan(ForegroundColorSpan(Color.BLUE), 49, 63, 0)
+        SpanString.setSpan(ForegroundColorSpan(Color.WHITE), 32, 45, 0)
+        SpanString.setSpan(ForegroundColorSpan(Color.WHITE), 49, 63, 0)
         SpanString.setSpan(UnderlineSpan(), 32, 45, 0)
         SpanString.setSpan(UnderlineSpan(), 49, 63, 0)
+        SpanString.setSpan(StyleSpan(Typeface.BOLD), 32, 45, 0)
+        SpanString.setSpan(StyleSpan(Typeface.BOLD), 49, 63, 0)
 
         binding.tvTermsPolicy.movementMethod = LinkMovementMethod.getInstance()
         binding.tvTermsPolicy.setText(SpanString, TextView.BufferType.SPANNABLE)
@@ -88,7 +89,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         binding.tvSignUp.setText(signup, TextView.BufferType.SPANNABLE)
 
         binding.ccp.setOnCountryChangeListener { selectedCountry ->
-            showToast(selectedCountry.phoneCode)
+            //showToast(selectedCountry.phoneCode)
 
         }
 
@@ -130,15 +131,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 }
 
                 else -> {
-                    moveToOtp()
-                    /*callLoginApi(
-                        LoginReqModel(
-                            binding.ccp.selectedCountryCodeWithPlus,
-                            binding.etPhoneNumber.text.toString(),
-                            2
+                    //moveToOtp()
+                    if (isConnected(this@LoginActivity)) {
+                        callLoginApi(
+                            LoginReqModel(
+                                binding.ccp.selectedCountryCodeWithPlus,
+                                binding.etPhoneNumber.text.toString(),
+                                2
+                            )
                         )
-                    )*/
-
+                    }else
+                        showError(getString(R.string.no_internet))
                 }
             }
         }
@@ -153,27 +156,19 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             }
 
             override fun onSuccess(loginResponse: LoginResponse?) {
-                loginResponse?.let { Log.e("ggg", it.toString()) }
-                /* if (loginResponse?.status == true) {
+                if (loginResponse?.status == false) {
+                    Log.e("ggg", loginResponse.data?.body.toString())
+                    EriaApplication.appPrefs.setMobile_no(
+                        this@LoginActivity,
+                        loginResponse.data?.mobile_no
+                    )
+                    Log.e("ggg123",  EriaApplication.appPrefs.getMobile_no(this@LoginActivity)!!)
+                    Toast.makeText(this@LoginActivity,  EriaApplication.getPrefs().getMobile_no(this@LoginActivity), Toast.LENGTH_SHORT).show()
                     moveToOtp()
-                    showToast(loginResponse?.message!!)
-                } else {
-                    showToast(getString(R.string.error_something_went_wrong))
-                }*/
-                /*when  {
-                    (loginResponse.status!!){
-                        moveToOtp()
-                    }
-                    ApiConfig.CALL_SUCCESS -> {
-                      showToast(loginRegisterResponse.message!!)
-                     //  saveUserDataInPref(loginRegisterResponse)
-                       // moveToDashboard()                    }
-                    ApiConfig.CALL_FAILED_STATUS_0 -> showToast(loginRegisterResponse.message!!)                    ApiConfig.CALL_FAILED_STATUS_2 -> showToast(loginRegisterResponse.message!!)
-                    ApiConfig.CALL_FAILED_STATUS_3 -> showToast(loginRegisterResponse.message!!)
-                    ApiConfig.CALL_FAILED_STATUS_4 -> showToast(loginRegisterResponse.message!!)
-                   ApiConfig.CALL_FAILED_STATUS_5 -> showToast(loginRegisterResponse.message!!)
-                    else -> showToast(getString(R.string.error_something_went_wrong))
-                }*/
+                }else{
+                    Toast.makeText(this@LoginActivity, loginResponse?.message, Toast.LENGTH_LONG).show()
+                }
+
             }
 
             override fun onFailure(code: Int, msg: String?) {
@@ -197,34 +192,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         startActivity(intent)
     }
 
-    private fun saveUserDataInPref(loginResponse: LoginResponse) {
 
-        EriaApplication.getPrefs().setUserId(
-            this@LoginActivity,
-            Integer.parseInt(loginResponse.data?.user_id!!)
-        )
-
-       /* EriaApplication.getPrefs().setFcmToken(
-            this@LoginActivity,
-            loginRegisterResponse.loginData?.customerDetails?.accessToken
-        )
-
-        EriaApplication.getPrefs().setUserName(
-            this@LoginActivity,
-            loginRegisterResponse.loginData?.customerDetails?.name
-        )
-
-        EriaApplication.getPrefs().setSignInMobile(
-            this@LoginActivity,
-            loginRegisterResponse.loginData?.customerDetails?.contactNo
-        )
-        EriaApplication.getPrefs().setUserEmail(
-            this@LoginActivity,
-            loginRegisterResponse.loginData?.customerDetails?.email
-        )
-        AppData.ACCESS_TOKEN =
-            loginRegisterResponse.loginData?.customerDetails?.accessToken.toString()*/
-    }
 
     /*  private fun moveToForgotPassword() {
           var intent = Intent(this@LoginActivity, ForgotPasswordActivity::class.java)

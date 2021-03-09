@@ -40,11 +40,11 @@
                             app:layout_constraintLeft_toLeftOf="parent"
                             android:fontFamily="@font/roboto_medium"
                             android:text="Apply Coupon"
-                            android:drawableLeft="@drawable/ic_group"
-                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:drawableStart="@drawable/ic_group"
+                            android:layout_marginStart="@dimen/_5sdp"
                             android:layout_margin="@dimen/_10sdp"
                             android:drawablePadding="@dimen/_10sdp"
-                            android:drawableRight="@drawable/ic_arrowbackios_baseline"
+                            android:drawableEnd="@drawable/ic_arrowbackios_baseline"
                             android:textColor="@color/black_text_color"
                             android:textSize="@dimen/_14ssp"
                             />
@@ -59,7 +59,7 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/_5sdp">
+                            android:layout_marginEnd="@dimen/_5sdp">
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                             android:text="Item Total"
                             android:layout_marginTop="@dimen/_10sdp"
                             android:paddingTop="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
+                            android:paddingStart="@dimen/_10sdp"
                             android:textColor="@color/black_text_color"
                             android:textSize="@dimen/_10ssp"
                             />
@@ -76,10 +76,10 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/roboto_regular"
                                 android:text="$49.00"
-                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:paddingTop="@dimen/_5sdp"
-                                android:paddingLeft="@dimen/_10sdp"
+                                android:paddingStart="@dimen/_10sdp"
                                 android:textColor="@color/black_text_color"
                                 android:textSize="@dimen/_10ssp"
                                 />
@@ -87,14 +87,14 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/_5sdp">
+                            android:layout_marginEnd="@dimen/_5sdp">
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_regular"
                             android:text="Discount"
                             android:paddingTop="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
+                            android:paddingStart="@dimen/_10sdp"
                             android:textColor="@color/black_text_color"
                             android:textSize="@dimen/_10ssp"
                             />
@@ -103,9 +103,9 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_regular"
                             android:text="$10.00"
-                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
                             android:paddingTop="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
+                            android:paddingStart="@dimen/_10sdp"
                             android:textColor="@color/black_text_color"
                             android:textSize="@dimen/_10ssp"
                             />
@@ -113,14 +113,14 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/_5sdp">
+                            android:layout_marginEnd="@dimen/_5sdp">
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_regular"
                             android:paddingTop="@dimen/_5sdp"
                             android:text="Delivery Fee"
-                            android:paddingLeft="@dimen/_10sdp"
+                            android:paddingStart="@dimen/_10sdp"
                             android:textColor="@color/black_text_color"
                             android:textSize="@dimen/_10ssp"
                             />
@@ -129,9 +129,9 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_bold"
                             android:text="Free"
-                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
                             android:paddingTop="@dimen/_5sdp"
-                            android:paddingLeft="@dimen/_10sdp"
+                            android:paddingStart="@dimen/_10sdp"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/_10ssp"
                             />
@@ -156,7 +156,7 @@
                                 android:text="Total"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:paddingTop="@dimen/_5sdp"
-                                android:paddingLeft="@dimen/_10sdp"
+                                android:padding="@dimen/_10sdp"
                                 android:textColor="@color/black_text_color"
                                 android:textSize="@dimen/_24ssp"
                                 />
@@ -165,10 +165,10 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/roboto_bold"
                                 android:text="$39.00"
-                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:paddingTop="@dimen/_5sdp"
-                                android:paddingLeft="@dimen/_10sdp"
+                                android:padding="@dimen/_10sdp"
                                 android:textColor="@color/black_text_color"
                                 android:textSize="@dimen/_24ssp"
                                 />
@@ -186,29 +186,31 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_10sdp"
-                            android:layout_marginRight="@dimen/_5sdp">
+                            android:layout_marginEnd="@dimen/_5sdp">
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/roboto_regular"
+                                android:id="@+id/tvCurrentAddress"
                                 android:text="Deliver at  Home \n Consectetur adipiscing elit. 5896"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:paddingTop="@dimen/_5sdp"
                                 android:drawablePadding="@dimen/_10sdp"
-                                android:paddingLeft="@dimen/_10sdp"
-                                android:drawableLeft="@drawable/ic_map_pin"
+                                android:clickable="true"
+                                android:padding="@dimen/_10sdp"
+                                android:drawableStart="@drawable/ic_map_pin"
                                 android:textColor="@color/black_text_color"
                                 android:textSize="@dimen/_10ssp"
-                                />
+                                android:focusable="true" />
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/roboto_bold"
                                 android:text="CHANGE"
-                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:paddingTop="@dimen/_5sdp"
-                                android:paddingLeft="@dimen/_10sdp"
+                                android:padding="@dimen/_10sdp"
                                 android:textColor="@color/red_text_color"
                                 android:textSize="@dimen/_10ssp"
                                 />

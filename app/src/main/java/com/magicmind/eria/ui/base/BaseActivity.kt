@@ -16,15 +16,12 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.annotation.IdRes
 import androidx.room.Room
-import com.dc.dlocation.LocationManager
-import com.dc.dlocation.configuration.Configurations
-import com.dc.dlocation.configuration.LocationConfiguration
-import com.dc.dlocation.listener.LocationListener
 import com.magicmind.eria.data.network.ApiClient
 import com.magicmind.eria.data.network.ApiStores
 import com.magicmind.eria.db_dao.AppDatabase
@@ -36,13 +33,7 @@ open class BaseActivity : AppCompatActivity() {
     private var progressDialog: ProgressDialog? = null
     var emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
 
-    private var locationManager: LocationManager? = null
-    private fun getLocationConfiguration(): LocationConfiguration {
-        return Configurations.defaultConfiguration(
-            "Please grant the permission to continue with Eria",
-            "Would you mind to turn GPS on? Please turn the GPS on."
-        )
-    }
+
 
     var db:AppDatabase? = null
     override fun onStart() {
@@ -52,51 +43,21 @@ open class BaseActivity : AppCompatActivity() {
             AppDatabase::class.java, "Address_Table"
         ).build()
     }
-    protected open fun getLocationManager(): LocationManager? {
-        return locationManager
-    }
-
-    open fun getLocation() {
-        locationManager!!.get()
-    }
-
     @CallSuper
     override fun onDestroy() {
-        locationManager?.onDestroy()
         super.onDestroy()
     }
 
     @CallSuper
     override fun onPause() {
-        locationManager?.onPause()
+        Log.e(this.javaClass.name,"ON_PAUSE")
         super.onPause()
     }
 
     @CallSuper
     override fun onResume() {
         super.onResume()
-        locationManager?.onResume()
-    }
-
-    @CallSuper
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
-    ) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (locationManager != null)
-            locationManager!!.onActivityResult(requestCode, resultCode, data)
-    }
-
-    @CallSuper
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        locationManager!!.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.e(this.javaClass.name,"ON_RESUME")
     }
 
     override fun startActivity(intent: Intent?) {
@@ -107,7 +68,7 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun startActivityForResult(intent: Intent?, requestCode: Int) {
         super.startActivityForResult(intent, requestCode)
-        hideSoftKeyboard()
+//        hideSoftKeyboard()
         overridePendingTransitionEnter()
     }
 
@@ -180,14 +141,6 @@ open class BaseActivity : AppCompatActivity() {
         )
     }
 
-
-    fun initLocation(listener: LocationListener) {
-        locationManager = LocationManager.Builder(applicationContext)
-            .configuration(getLocationConfiguration())
-            .activity(this)
-            .notify(listener)
-            .build()
-    }
 
     fun <T : View> Activity.bind(@IdRes res: Int): Lazy<T> {
         @Suppress("UNCHECKED_CAST")

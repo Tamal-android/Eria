@@ -8,10 +8,10 @@ class OTPVerifyResponse :BaseResponse<OtpDataModel>()
 
 data class OtpDataModel (
 
-    @SerializedName("user_id")
+    @SerializedName("token")
     @Expose
-    val user_id: String?=null,
-    @SerializedName("result")
+    val token: String?=null,
+    @SerializedName("user")
     @Expose
-    val result: Boolean?=false
+    val user: OTPUserModel?=null
 )

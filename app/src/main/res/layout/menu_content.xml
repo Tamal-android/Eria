@@ -10,14 +10,13 @@
         tools:context="com.magicmind.eria.ui.base.HomeBaseActivity"
         android:id="@+id/nsvScroll"
         android:layout_above="@+id/btnCart"
-        android:background="@color/colorPrimaryDark"
+        android:background="@android:color/black"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background_white_profile"
-        android:padding="@dimen/_8sdp"
-        android:layout_margin="@dimen/_5sdp">
+        android:padding="@dimen/_8sdp">
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

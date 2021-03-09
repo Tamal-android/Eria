@@ -19,6 +19,9 @@ class AppPrefs : DPrefs() {
     private val PREF_KEY_USER_TYPE = "KEY_USER_TYPE"
     private val PREF_KEY_CURRENT_LATITUDE = "KEY_CURRENT_LATITUDE"
     private val PREF_KEY_CURRENT_LONGITUDE = "KEY_CURRENT_LONGITUDE"
+    private val PREF_KEY_ADDRESS_ID = "KEY_ADDRESS_ID"
+    private val PREF_KEY_BEARER_TOKEN = "KEY_BEARER_TOKEN"
+    private val PREF_KEY_STATUS = "KEY_STATUS"
 
     private val PREF_DEFAULT_USER_ID = 0
     private val PREF_DEFAULT_OTP = ""
@@ -34,6 +37,9 @@ class AppPrefs : DPrefs() {
     private val PREF_DEFAULT_USER_TYPE = ""
     private val PREF_DEFAULT_CURRENT_LATITUDE = ""
     private val PREF_DEFAULT_CURRENT_LONGITUDE = ""
+    private val PREF_DEFAULT_ADDRESS_ID = 0
+    private val PREF_DEFAULT_BEARER_TOKEN = ""
+    private val PREF_DEFAULT_STATUS = ""
 
 
     fun setIsFirstTimeUser(mContext: Context, boolean: Boolean) {
@@ -68,12 +74,26 @@ class AppPrefs : DPrefs() {
     fun getOTP(mContext: Context): String? {
         return getString(mContext,PREF_KEY_OTP, PREF_DEFAULT_OTP)
     }
-    fun setMobile_no(mContext: Context,otpHash: String?) {
-        otpHash?.let { setString(mContext,PREF_KEY_OTP, it) }
+    fun setMobile_no(mContext: Context,mobileHash: String?) {
+        mobileHash?.let { setString(mContext,PREF_KEY_MOBILE_NO, it) }
     }
 
     fun getMobile_no(mContext: Context): String? {
-        return getString(mContext,PREF_KEY_OTP, PREF_DEFAULT_OTP)
+        return getString(mContext,PREF_KEY_MOBILE_NO, PREF_DEFAULT_MOBILE_NO)
+    }
+    fun setBEARER_TOKEN(mContext: Context,bearerHash: String?) {
+        bearerHash?.let { setString(mContext,PREF_KEY_BEARER_TOKEN, it) }
+    }
+
+    fun getBEARER_TOKEN(mContext: Context): String? {
+        return getString(mContext,PREF_KEY_BEARER_TOKEN, PREF_DEFAULT_BEARER_TOKEN)
+    }
+    fun setSTATUS(mContext: Context,statusHash: String?) {
+        statusHash?.let { setString(mContext,PREF_KEY_STATUS, it) }
+    }
+
+    fun getSTATUS(mContext: Context): String? {
+        return getString(mContext,PREF_KEY_STATUS, PREF_DEFAULT_STATUS)
     }
 
     fun setUserName(mContext: Context,userName: String?) {
@@ -120,5 +140,13 @@ class AppPrefs : DPrefs() {
 
     fun getCurrentLongitude(mContext: Context): String? {
         return getString(mContext,PREF_KEY_CURRENT_LONGITUDE, PREF_DEFAULT_CURRENT_LONGITUDE)
+    }
+
+    fun setAddressId(mContext: Context,addressId: Int?) {
+        addressId?.let { setInt(mContext,PREF_KEY_ADDRESS_ID, it) }
+    }
+
+    fun getAddressId(mContext: Context): Int {
+        return getInt(mContext,PREF_KEY_ADDRESS_ID, PREF_DEFAULT_ADDRESS_ID)
     }
 }

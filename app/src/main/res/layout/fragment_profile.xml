@@ -272,6 +272,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/banner_image"
                             app:layout_constraintLeft_toLeftOf="parent"
                             android:fontFamily="@font/roboto_regular"
+                            android:id="@+id/tvLogout"
                             android:text="Logout"
                             android:padding="@dimen/_10sdp"
                             android:drawableEnd="@drawable/ic_arrowbackios_baseline"

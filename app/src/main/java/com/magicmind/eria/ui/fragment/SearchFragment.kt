@@ -1,5 +1,6 @@
 package com.magicmind.eria.ui.fragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +33,6 @@ class SearchFragment : BaseFragment() {
 
     override fun getFragmentActivityReference(activity: HomeBaseActivity) {
 
-        baseActivity?.showHeader(false)
     }
 
     override fun onCreateView(
@@ -47,7 +47,10 @@ class SearchFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        baseActivity?.showHeader(false)
+        baseActivity?.showHeader(true)
+        baseActivity?.changeHeaderColor(R.color.white)
+        baseActivity?.setToolbarTitle("Search")
+        baseActivity?.setToolbarTextColor(Color.BLACK)
         var adapter: SearchAdapter? = null
 
         binding.svSearch.requestFocus();

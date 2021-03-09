@@ -1,5 +1,6 @@
 package com.magicmind.eria.db_dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -11,8 +12,8 @@ interface AddressDao {
     @Query("SELECT * FROM Address_Table")
     suspend fun getAll(): List<Address>
 
-    @Query("SELECT * FROM Address_Table WHERE addressid IN (:userIds)")
-    suspend fun loadAllByIds(userIds: IntArray): List<Address>
+    @Query("SELECT * FROM Address_Table WHERE addressid = :addressIds")
+    suspend fun loadAllByIds(addressIds: Int): Address
 
     /* @Query("SELECT * FROM user WHERE first_name LIKE :first AND " +
              "last_name LIKE :last LIMIT 1")

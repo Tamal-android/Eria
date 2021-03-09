@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.location.Address
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -12,20 +13,29 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
-import com.magicmind.eria.R
-import com.magicmind.eria.databinding.ActivityAddressBinding
-import com.magicmind.eria.db_dao.AddressDao
-import com.magicmind.eria.ui.base.BaseActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
+import com.magicmind.eria.R
+import com.magicmind.eria.app.EriaApplication
+import com.magicmind.eria.databinding.ActivityAddressBinding
+import com.magicmind.eria.db_dao.AddressDao
+import com.magicmind.eria.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_address.*
 import kotlinx.android.synthetic.main.address_cart_view.view.*
 import kotlinx.coroutines.Dispatchers
@@ -107,6 +117,38 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
                 rowView.tvTag.text = addressDao.getAll()[i].Tag
                 rowView.tvAddress.text = addressDao.getAll()[i].Address
                 rowView.tvAddress.tag = addressDao.getAll()[i].addressid
+                if (EriaApplication.getPrefs().getAddressId(
+                        this@AddressActivity)==addressDao.getAll()[i].addressid){
+                    rowView.cbAddressSelect.isChecked=true
+                }
+                rowView.cbAddressSelect.setOnCheckedChangeListener { buttonView, isChecked ->
+                    if (isChecked) {
+                        val p: ConstraintLayout = buttonView.parent as ConstraintLayout
+                        val p1: CardView = p.parent as CardView
+                        val p2: LinearLayout = p1.parent as LinearLayout
+
+                        for (j: Int in 0 until p2.childCount) {
+                            if (p2!=null) {
+                                Log.e("ACTIVITY", p2.getChildAt(j).toString())
+                                val c: CardView = p2.getChildAt(j) as CardView
+                                val c1: ConstraintLayout = c.getChildAt(0) as ConstraintLayout
+                                val c2: CheckBox = c1.getChildAt(1) as CheckBox
+                                if (c2.isChecked) {
+                                    c2.isChecked = false
+                                }
+                                buttonView.isChecked = true
+                                EriaApplication.getPrefs().setAddressId(
+                                    this@AddressActivity,
+                                    rowView.tvAddress.tag as Int
+                                )
+                            }
+                        }
+                    }
+
+                    Log.e("ACTIVITY", EriaApplication.getPrefs().getAddressId(
+                        this@AddressActivity).toString())
+
+                }
                 rowView.ivMore.setOnClickListener(View.OnClickListener {
                     //Creating the instance of PopupMenu
                     val popup = PopupMenu(this@AddressActivity, it)
@@ -179,15 +221,6 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
             }
         }
 
-        /* val i = Intent(this@AddressActivity, LocationActivity::class.java)
-         i.putExtra("")
-         overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
-         startActivity(i)*/
-
-        /*val thread = Thread {
-          //  addressDao.insertAll(Address(et1.text.toString(), et2.text.toString()))
-        }
-        thread.start()*/
     }
 
     private fun enableLoc() {

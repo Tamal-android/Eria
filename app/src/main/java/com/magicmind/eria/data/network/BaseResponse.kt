@@ -4,11 +4,11 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 open class BaseResponse<T> {
-    @SerializedName("status")
+    @SerializedName("error")
     @Expose
-    var status :Boolean = false
+    var status :Boolean = true
 
-    @SerializedName("message")
+    @SerializedName("msg")
     @Expose
     var message: String? = null
     @SerializedName("data")

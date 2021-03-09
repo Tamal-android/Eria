@@ -1,20 +1,22 @@
 package com.magicmind.eria.ui.widget
 
+import android.R.attr.*
 import android.annotation.SuppressLint
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.RectF
+import android.content.Context
+import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.view.MotionEvent
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.magicmind.eria.R
 
 
 internal enum class ButtonsState {
     GONE, LEFT_VISIBLE, RIGHT_VISIBLE
 }
 
-class SwipeController(param: SwipeControllerActions) : ItemTouchHelper.Callback() {
+class SwipeController(context: Context, param: SwipeControllerActions) :
+    ItemTouchHelper.Callback() {
 
     private var swipeBack = false
 
@@ -26,7 +28,8 @@ class SwipeController(param: SwipeControllerActions) : ItemTouchHelper.Callback(
 
     private var buttonsActions: SwipeControllerActions? = param
 
-    private val buttonWidth = 200f
+    private val buttonWidth = 100f
+    val mContext = context
 
 
     override fun getMovementFlags(
@@ -57,8 +60,8 @@ class SwipeController(param: SwipeControllerActions) : ItemTouchHelper.Callback(
     }
 
 
-    var dx1 =0f
-    var dy1 =0f
+    var dx1 = 0f
+    var dy1 = 0f
     override fun onChildDraw(
         c: Canvas,
         recyclerView: RecyclerView,
@@ -68,7 +71,7 @@ class SwipeController(param: SwipeControllerActions) : ItemTouchHelper.Callback(
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
-        dx1 =dX
+        dx1 = dX
         dy1 = dY
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             if (buttonShowedState != ButtonsState.GONE) {
@@ -119,8 +122,9 @@ class SwipeController(param: SwipeControllerActions) : ItemTouchHelper.Callback(
                 event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
             if (swipeBack) {
                 if (dX < -buttonWidth) buttonShowedState =
-                    ButtonsState.RIGHT_VISIBLE else if (dX > buttonWidth) buttonShowedState =
-                    ButtonsState.LEFT_VISIBLE
+                    ButtonsState.RIGHT_VISIBLE
+                /*else if (dX > buttonWidth) buttonShowedState =
+                    ButtonsState.LEFT_VISIBLE*/
                 if (buttonShowedState != ButtonsState.GONE) {
                     setTouchDownListener(
                         c,
@@ -193,9 +197,10 @@ class SwipeController(param: SwipeControllerActions) : ItemTouchHelper.Callback(
                         event.y
                     )
                 ) {
-                    if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
-                        buttonsActions!!.onLeftClicked(viewHolder.adapterPosition)
-                    } else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
+                    /*if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
+                        //buttonsActions!!.onLeftClicked(viewHolder.adapterPosition)
+                    } else*/
+                    if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
                         buttonsActions!!.onRightClicked(viewHolder.adapterPosition)
                     }
                 }
@@ -213,31 +218,43 @@ class SwipeController(param: SwipeControllerActions) : ItemTouchHelper.Callback(
     }
 
     private fun drawButtons(c: Canvas, viewHolder: RecyclerView.ViewHolder) {
-        val buttonWidthWithoutPadding: Float = buttonWidth - 20
+        val buttonWidthWithoutPadding: Float = buttonWidth - 20f
         val corners = 16f
         val itemView = viewHolder.itemView
         val p = Paint()
-        val leftButton = RectF(
+        /*val leftButton = RectF(
             itemView.left.toFloat(),
             itemView.top.toFloat(), itemView.left + buttonWidthWithoutPadding,
             itemView.bottom.toFloat()
         )
         p.color = Color.BLUE
         c.drawRoundRect(leftButton, corners, corners, p)
-        drawText("EDIT", c, leftButton, p)
+        drawText("EDIT", c, leftButton, p)*/
 
 
+        /*val res: Resources = mContext.resources
+        val bitmap: Bitmap = BitmapFactory.decodeResource(res, R.drawable.ic_current_location)
+        c1=Canvas(bitmap.copy(Bitmap.Config.ARGB_8888, true));*/
         val rightButton = RectF(
             itemView.right - buttonWidthWithoutPadding,
-            itemView.top.toFloat(), itemView.right.toFloat(), itemView.bottom.toFloat()
+            itemView.top.toFloat()+80f, itemView.right.toFloat()-20f, itemView.bottom.toFloat()-80F
         )
-        p.color = Color.RED
-        c.drawRoundRect(rightButton, corners, corners, p)
-        drawText("DELETE", c, rightButton, p)
+
+        /*val d: Drawable = mContext.resources.getDrawable(R.drawable.ic_current_location, null)
+        d.setBounds(left, top, right, bottom)
+        d.draw(c)*/
+        val bitmap =
+            BitmapFactory.decodeResource(mContext.resources, R.drawable.delete_round)
+        c.drawBitmap(bitmap, null, rightButton, null)
+        // p.color = Color.WHITE
+
+        // c.drawRoundRect(rightButton, corners, corners, p)
+        // drawText("DELETE", c1, rightButton, p)
         buttonInstance = null
-        if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
+        /*if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
             buttonInstance = leftButton
-        } else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
+        } else */
+        if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
             buttonInstance = rightButton
         }
     }
