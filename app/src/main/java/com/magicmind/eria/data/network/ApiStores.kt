@@ -4,12 +4,10 @@ import com.magicmind.eria.data.model.request.LoginReqModel
 import com.magicmind.eria.data.model.request.LogoutReqModel
 import com.magicmind.eria.data.model.request.OTPReqModel
 import com.magicmind.eria.data.model.request.RegisterReqModel
-import com.magicmind.eria.data.model.response.LoginResponse
-import com.magicmind.eria.data.model.response.LogoutResponse
-import com.magicmind.eria.data.model.response.RegisterResponse
-import com.magicmind.eria.data.model.response.OTPVerifyResponse
+import com.magicmind.eria.data.model.response.*
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface ApiStores : ApiConfig{
@@ -24,6 +22,12 @@ interface ApiStores : ApiConfig{
 
     @POST(ApiConfig.API_LOGOUT)
     fun callLogoutApi(@Body logoutReqModel: LogoutReqModel): Call<LogoutResponse?>?
+
+    @GET(ApiConfig.API_SLIDER)
+    fun callBannerSliderApi(): Call<SliderImageResponse?>?
+
+    @GET(ApiConfig.API_RESTAURANTS)
+    fun callResturentApi(): Call<ResturentResponse?>?
 
     /*@POST(ApiConfig.API_FORGOT_PASSWORD)
     fun callForgotPasswordApi(@Body forgotPasswordReqModel: ForgotPasswordReqModel?): Call<ForgotPasswordResponse?>?

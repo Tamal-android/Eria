@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.PopupMenu
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -18,14 +19,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.magicmind.eria.R
 import com.magicmind.eria.data.model.response.MenuList
+import com.magicmind.eria.data.model.response.SliderImageResponse
+import com.magicmind.eria.data.network.ApiCallback
 import com.magicmind.eria.databinding.FragmentMenuListBinding
-import com.magicmind.eria.ui.adapter.ImageSlideAdaptor
+import com.magicmind.eria.ui.Interface.onMenuItemAdd
 import com.magicmind.eria.ui.adapter.MenuListAdapter
 import com.magicmind.eria.ui.adapter.SliderAdapter
 import com.magicmind.eria.ui.base.BaseFragment
@@ -44,6 +47,7 @@ class MenuListFragment : BaseFragment() {
     private var menuItemViewModel: MenuItemViewModel?=null
     private val fakeSize = 0
     private val realSize = 0
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     companion object {
         fun newInstance(): MenuListFragment {
             return MenuListFragment()
@@ -77,54 +81,6 @@ class MenuListFragment : BaseFragment() {
         return binding.root
     }
 
-    /*private val pageChangeCallback: OnPageChangeCallback = object : OnPageChangeCallback() {
-        var first = false
-        var last = false
-        override fun onPageSelected(position: Int) {
-            super.onPageSelected(position)
-            if (position == 0)
-            {
-                first = true;
-                last = false;
-            }
-            else if (position == 2)
-            {
-                first = false;
-                last = true;
-            }
-            else
-            {
-                first = false;
-                last = false;
-            }
-        }
-
-        override fun onPageScrollStateChanged(state: Int) {
-            super.onPageScrollStateChanged(state)
-            if (first && state === ViewPager.SCROLL_STATE_IDLE) {
-                // Jump without animation
-                val fragment: Fragment = mainFragmentList.get(mainFragmentList.size() - 1)
-                mainFragmentList.remove(mainFragmentList.size() - 1)
-                mainFragmentList.add(0, fragment)
-                mainPagerAdapter.setData(mainFragmentList)
-                mainPagerAdapter.notifyDataSetChanged()
-                Log.e(TAG, mainFragmentList.toString())
-                mainViewPager.setCurrentItem(1, false)
-            }
-            if (last && state === ViewPager.SCROLL_STATE_IDLE) {
-                // Jump without animation
-                val fragment: Fragment = mainFragmentList.get(0)
-                mainFragmentList.remove(0)
-                mainFragmentList.add(fragment)
-                mainPagerAdapter.setData(mainFragmentList)
-                mainPagerAdapter.notifyDataSetChanged()
-                Log.e(TAG, mainFragmentList.toString())
-                mainViewPager.setCurrentItem(mainFragmentList.size() - 2, false)
-            }
-        }
-    }*/
-
-    var itemCount:Int=0
     val handler = Handler(Looper.getMainLooper())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -140,32 +96,18 @@ class MenuListFragment : BaseFragment() {
             setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
         }
 
-//        val imageSlideAdapter = ImageSlideAdaptor(baseActivity!!, 3)
-//        binding.vpImageSlide.adapter = imageSlideAdapter
-//        binding.vpImageSlide.setCurrentItem(binding.vpImageSlide.getChildCount() * 1000 / 2, false)
-        /*binding.vpImageSlide.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
 
-                handler.removeMessages(0)
-
-                val runnable = Runnable {
-                    binding.vpImageSlide.currentItem = ++binding.vpImageSlide.currentItem
-                }
-                if (position < binding.vpImageSlide.adapter?.itemCount ?: 0) {
-                    handler.postDelayed(runnable, 1000)
-                }
-            }
-        })*/
-
-
-        implementSlider(listOf(Slider(R.raw.on_board_img1_land)))
-       // binding.vpImageSlide.registerOnPageChangeCallback(pageChangeCallback)
+        callSliderApi()
         var adapter: MenuListAdapter? = null
 
         val menuList = ArrayList<MenuList>()
-        adapter = MenuListAdapter(baseActivity!!, binding, menuList)
+        adapter = MenuListAdapter(baseActivity!!, binding, menuList,object : onMenuItemAdd {
+            override fun onItemAdded(position: Boolean, count: Int?) {
+                if (position){
+                    showBottomSheetDialogFragment()
+                }
+            }
+        })
 
         menuItemViewModel?.count?.observe(viewLifecycleOwner, Observer {
             Log.e("OBSERVER", it.toString())
@@ -206,8 +148,13 @@ class MenuListFragment : BaseFragment() {
         binding.vpImageSlide.currentItem = binding.vpImageSlide.currentItem + 1
     }
 
+    private fun showBottomSheetDialogFragment() {
+        val bottomSheetFragment = BottomSheetFragment()
+        bottomSheetFragment.show(baseActivity?.supportFragmentManager!!, bottomSheetFragment.tag)
+    }
+
     private fun implementSlider(sliders: List<Slider>) {
-        val sliderAdapter = SliderAdapter( sliders,binding.vpImageSlide)
+        val sliderAdapter = SliderAdapter( sliders)
         binding.vpImageSlide.adapter = sliderAdapter
         binding.vpImageSlide.clipToPadding = false
         binding.vpImageSlide.clipChildren = false
@@ -229,6 +176,46 @@ class MenuListFragment : BaseFragment() {
             }
         })
     }
+
+    private fun callSliderApi() {
+        // baseActivity?.showProgress(getString(R.string.txt_progress_loading))
+        val sliderApiCall = baseActivity?.getWebService()!!.callBannerSliderApi()
+        sliderApiCall!!.enqueue(object : ApiCallback<SliderImageResponse>() {
+            override fun onFinish() {
+                baseActivity?.hideProgress()
+            }
+
+            override fun onSuccess(model: SliderImageResponse?) {
+
+                Log.e("SLIDER",model?.status!!.toString())
+                if (!model.status){
+                    Log.e("SLIDER",model.data?.banners?.get(0)?.image!!)
+                    val listSlide= mutableListOf<Slider>()
+                    for (i in model.data?.banners!!.indices){
+                        listSlide.add(Slider(model.data?.image?.banner_image_path+model.data?.banners?.get(i)?.image!!))
+                    }
+                    implementSlider(listSlide!!)
+                }
+            }
+
+            override fun onFailure(code: Int, msg: String?) {
+                Log.e("Logout", "$msg :$code")
+                if (code == 403) {
+                    baseActivity?.showToast("User not registered")
+                } else
+                    baseActivity?.showToast(msg!!)
+            }
+
+            override fun onThrowable(t: Throwable?) {
+
+                Log.e("SLIDER",t.toString())
+                baseActivity?.showToast(getString(R.string.error_parse))
+            }
+
+        })
+    }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         baseActivity!!.setToolbarTitle("")

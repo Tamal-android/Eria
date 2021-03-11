@@ -31,6 +31,7 @@ import com.magicmind.eria.R
 import com.magicmind.eria.databinding.ActivitySplashBinding
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import com.magicmind.eria.app.AppData
 import com.magicmind.eria.app.EriaApplication
 import com.magicmind.eria.ui.base.BaseActivity
 import com.magicmind.eria.ui.base.HomeBaseActivity
@@ -173,11 +174,8 @@ class SplashActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
                 try {
                     Log.e(this.javaClass.name, "${location?.latitude}+  ${location?.longitude}")
 
-                    val i = Intent(this@SplashActivity, HomeBaseActivity::class.java)
-                    i.putExtra("location", location)
-                    overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
-                    startActivity(i)
-                    finish()
+                    movetoHomeBaseActivity(location!!)
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -186,6 +184,14 @@ class SplashActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
         }
 
 
+    }
+
+    fun movetoHomeBaseActivity(location: Location) {
+        val i = Intent(this@SplashActivity, HomeBaseActivity::class.java)
+        i.putExtra("location", location)
+        overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
+        startActivity(i)
+        finish()
     }
 
     private fun getLocationCallback() {
@@ -217,11 +223,8 @@ class SplashActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
                                 "${location?.latitude}+  ${location?.longitude}"
                             )
 
-                            val i = Intent(this@SplashActivity, HomeBaseActivity::class.java)
-                            i.putExtra("location", location)
-                            overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
-                            startActivity(i)
-                            finish()
+
+                            movetoHomeBaseActivity(location!!)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -265,38 +268,38 @@ class SplashActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
                         LocationSettingsStatusCodes.SUCCESS -> {
 
 
-                           /* if (ActivityCompat.checkSelfPermission(
-                                    this@SplashActivity,
-                                    Manifest.permission.ACCESS_FINE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                    this@SplashActivity,
-                                    Manifest.permission.ACCESS_COARSE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED
-                            ) {
-                                // TODO: Consider calling
-                                //    ActivityCompat#requestPermissions
-                                // here to request the missing permissions, and then overriding
-                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                //                                          int[] grantResults)
-                                // to handle the case where the user grants the permission. See the documentation
-                                // for ActivityCompat#requestPermissions for more details.
-                                return
-                            }
-                            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
-                                try {
-                                    Log.e(this.javaClass.name, "${location?.latitude}+  ${location?.longitude}")
+                            /* if (ActivityCompat.checkSelfPermission(
+                                     this@SplashActivity,
+                                     Manifest.permission.ACCESS_FINE_LOCATION
+                                 ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                     this@SplashActivity,
+                                     Manifest.permission.ACCESS_COARSE_LOCATION
+                                 ) != PackageManager.PERMISSION_GRANTED
+                             ) {
+                                 // TODO: Consider calling
+                                 //    ActivityCompat#requestPermissions
+                                 // here to request the missing permissions, and then overriding
+                                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                 //                                          int[] grantResults)
+                                 // to handle the case where the user grants the permission. See the documentation
+                                 // for ActivityCompat#requestPermissions for more details.
+                                 return
+                             }
+                             fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
+                                 try {
+                                     Log.e(this.javaClass.name, "${location?.latitude}+  ${location?.longitude}")
 
-                                    val i = Intent(this@SplashActivity, HomeBaseActivity::class.java)
-                                    i.putExtra("location", location )
-                                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                    overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
-                                    startActivity(i)
-                                    finish()
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
+                                     val i = Intent(this@SplashActivity, HomeBaseActivity::class.java)
+                                     i.putExtra("location", location )
+                                     i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                     overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
+                                     startActivity(i)
+                                     finish()
+                                 } catch (e: Exception) {
+                                     e.printStackTrace()
+                                 }
 
-                            }*/
+                             }*/
                             Toast.makeText(
                                 this@SplashActivity,
                                 "CONNECTED",
@@ -385,7 +388,12 @@ class SplashActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
                         // for ActivityCompat#requestPermissions for more details.
                         return
                     }
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
+                    locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        5000,
+                        5f,
+                        this
+                    )
                     if ((ContextCompat.checkSelfPermission(
                             this@SplashActivity,
                             Manifest.permission.ACCESS_FINE_LOCATION
@@ -403,6 +411,7 @@ class SplashActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
             }
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -451,7 +460,7 @@ class SplashActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
                         }
 
                     }*/
-                     getLocationCallback()
+                    getLocationCallback()
                     Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
                 }
                 Activity.RESULT_CANCELED -> Log.d(this.localClassName, "CANCEL")
@@ -472,11 +481,11 @@ class SplashActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
 
     override fun onLocationChanged(location: Location) {
 
-       /* val i = Intent(this@SplashActivity, HomeBaseActivity::class.java)
-        i.putExtra("location", location)
-        overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
-        startActivity(i)
-        finish()*/
+        /* val i = Intent(this@SplashActivity, HomeBaseActivity::class.java)
+         i.putExtra("location", location)
+         overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
+         startActivity(i)
+         finish()*/
         /*if (ActivityCompat.checkSelfPermission(
                 this@SplashActivity,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -518,7 +527,7 @@ class SplashActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
     }
 
     override fun onProviderEnabled(provider: String) {
-       // getLocationCallback()
+        // getLocationCallback()
         if (ActivityCompat.checkSelfPermission(
                 this@SplashActivity,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -538,16 +547,16 @@ class SplashActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks,
         }
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location? ->
             try {
-                if (location!=null) {
+                if (location != null) {
 
-                   /* Log.e(this.javaClass.name, "${location?.latitude}+  ${location?.longitude} kn1234edsd")
+                    /* Log.e(this.javaClass.name, "${location?.latitude}+  ${location?.longitude} kn1234edsd")
 
-                    val i = Intent(this@SplashActivity, HomeBaseActivity::class.java)
-                    i.putExtra("location", location)
-                    i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
-                    startActivity(i)
-                    finish()*/
+                     val i = Intent(this@SplashActivity, HomeBaseActivity::class.java)
+                     i.putExtra("location", location)
+                     i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                     overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
+                     startActivity(i)
+                     finish()*/
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

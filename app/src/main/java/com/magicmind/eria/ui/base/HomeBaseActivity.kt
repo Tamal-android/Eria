@@ -39,6 +39,8 @@ import com.magicmind.eria.ui.dialog.CircularProgressBar
 import com.magicmind.eria.ui.fragment.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.magicmind.eria.app.AppData
+import com.magicmind.eria.app.EriaApplication
 import com.magicmind.eria.data.network.ApiClient
 import com.magicmind.eria.data.network.ApiStores
 import com.magicmind.eria.db_dao.AppDatabase
@@ -87,6 +89,7 @@ open class HomeBaseActivity : BaseActivity(), View.OnClickListener,
             binding.tvToolbarText.text = getAddress(null,location1)
         }
 
+        AppData.ACCESS_TOKEN = "Bearer "+ EriaApplication.getPrefs().getBEARER_TOKEN(this@HomeBaseActivity)!!.trim()
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         initView()

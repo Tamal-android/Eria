@@ -35,14 +35,9 @@ class CartAdapter(
 
         holder.ivAddItem.setOnClickListener(View.OnClickListener {
             if (holder.ItemQuantityCount >= 1) {
-
-                //   holder.btnAdd.visibility= View.GONE
-                // holder.llMenuAdd.visibility= View.VISIBLE
                 holder.ItemQuantityCount++
                 holder.tvItemQuantity.text = holder.ItemQuantityCount.toString()
             } else if (holder.ItemQuantityCount < 1 || holder.ItemQuantityCount == 0) {
-                // holder.btnAdd.visibility= View.VISIBLE
-                // holder.llMenuAdd.visibility= View.GONE
                 holder.ItemQuantityCount = 0
                 holder.tvItemQuantity.text = holder.ItemQuantityCount.toString()
                 _cartItemRemoveListener!!.onItemRemoved(position)
@@ -50,14 +45,9 @@ class CartAdapter(
         })
         holder.ivRemoveItem.setOnClickListener(View.OnClickListener {
             if (holder.ItemQuantityCount > 1) {
-
-                //  holder.btnAdd.visibility= View.GONE
-                // holder.llMenuAdd.visibility= View.VISIBLE
                 --holder.ItemQuantityCount
                 holder.tvItemQuantity.text = holder.ItemQuantityCount.toString()
             } else {
-                //  holder.btnAdd.visibility= View.VISIBLE
-                //  holder.llMenuAdd.visibility= View.GONE
                 holder.ItemQuantityCount = 0
                 holder.tvItemQuantity.text = holder.ItemQuantityCount.toString()
                 _cartItemRemoveListener!!.onItemRemoved(position)

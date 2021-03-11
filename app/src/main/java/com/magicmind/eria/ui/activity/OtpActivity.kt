@@ -46,15 +46,16 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
 
 
     }
+
     private val FORMAT = "%02d:%02d"
 
     var seconds = 0
-    var minutes:Int = 0
+    var minutes: Int = 0
 
     private fun setOtpTimer() {
         object : CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                binding.tvResendOtp.isEnabled=false
+                binding.tvResendOtp.isEnabled = false
                 binding.tvResendOtpTimer.text = String.format(
                     FORMAT,
                     TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
@@ -67,7 +68,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
             }
 
             override fun onFinish() {
-                binding.tvResendOtp.isEnabled=true
+                binding.tvResendOtp.isEnabled = true
                 binding.tvResendOtpTimer.text = "now!"
             }
         }.start()
@@ -91,13 +92,13 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
         binding.etOtpNo2.addTextChangedListener(OtpTextWatcher(1))
         binding.etOtpNo3.addTextChangedListener(OtpTextWatcher(2))
         binding.etOtpNo4.addTextChangedListener(OtpTextWatcher(3))
-       // binding.etOtpNo5.addTextChangedListener(OtpTextWatcher(4))
+        // binding.etOtpNo5.addTextChangedListener(OtpTextWatcher(4))
 
         binding.etOtpNo1.setOnKeyListener(OtpOnKeyListener(0))
         binding.etOtpNo2.setOnKeyListener(OtpOnKeyListener(1))
         binding.etOtpNo3.setOnKeyListener(OtpOnKeyListener(2))
         binding.etOtpNo4.setOnKeyListener(OtpOnKeyListener(3))
-       // binding.etOtpNo5.setOnKeyListener(OtpOnKeyListener(4))
+        // binding.etOtpNo5.setOnKeyListener(OtpOnKeyListener(4))
     }
 
 
@@ -199,6 +200,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
         )
         return deviceId
     }
+
     fun getDeviceName(): String? {
         val manufacturer = Build.MANUFACTURER
         val model = Build.MODEL
@@ -221,26 +223,35 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
             Character.toUpperCase(first).toString() + s.substring(1)
         }
     }
+
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.btn_complete -> {
-                Log.e(this.javaClass.name,  EriaApplication.getPrefs().getMobile_no(this@OtpActivity)!!)
+                Log.e(
+                    this.javaClass.name,
+                    EriaApplication.getPrefs().getMobile_no(this@OtpActivity)!!
+                )
 
                 if (isConnected(this)) {
-                    EriaApplication.getPrefs().getMobile_no(this@OtpActivity)?.let {
-                        callOTPApi(
-                            OTPReqModel(
-                                it,
-                                otpEditTexts[0].text.toString() + otpEditTexts[1].text.toString() + otpEditTexts[2].text.toString() + otpEditTexts[3].text.toString(),
-                                getDeviceId(this)!!,
-                                getDeviceName()!!,
-                                "Android",
-                                EriaApplication.appPrefs.getFcmToken(this)!!
+                    if (otpEditTexts[0].text.toString().isEmpty() || otpEditTexts[1].text.toString().isEmpty() || otpEditTexts[2].text.toString().isEmpty() || otpEditTexts[3].text.toString().isEmpty()){
+                        showToast("Enter valid OTP")
+                    }else{
+                        EriaApplication.getPrefs().getMobile_no(this@OtpActivity)?.let {
+                            callOTPApi(
+                                OTPReqModel(
+                                    it,
+                                    otpEditTexts[0].text.toString() + otpEditTexts[1].text.toString() + otpEditTexts[2].text.toString() + otpEditTexts[3].text.toString(),
+                                    getDeviceId(this)!!,
+                                    getDeviceName()!!,
+                                    "Android",
+                                    EriaApplication.appPrefs.getFcmToken(this)!!
+                                )
                             )
-                        )
+                        }
                     }
 
-                }else{
+
+                } else {
                     showError(getString(R.string.no_internet))
                 }
                 //moveToLocation()
@@ -257,12 +268,12 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
             }
 
             override fun onSuccess(model: OTPVerifyResponse?) {
-                Toast.makeText(this@OtpActivity,model?.message,Toast.LENGTH_LONG).show()
-                if (model?.status == false){
+                Toast.makeText(this@OtpActivity, model?.message, Toast.LENGTH_LONG).show()
+                if (model?.status == false) {
                     saveUserDataInPref(model)
                     moveToLocation()
 
-                }else{
+                } else {
                     EriaApplication.getPrefs().setUserLoggedIn(
                         this@OtpActivity,
                         false
@@ -285,14 +296,14 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
 
     private fun saveUserDataInPref(otpVerifyResponse: OTPVerifyResponse) {
 
-            EriaApplication.getPrefs().setMobile_no(
-                this@OtpActivity,
-                otpVerifyResponse.data?.user!!.mobile
-            )
-
-            EriaApplication.getPrefs().setBEARER_TOKEN(
+        EriaApplication.getPrefs().setMobile_no(
             this@OtpActivity,
-                otpVerifyResponse.data?.token
+            otpVerifyResponse.data?.user!!.mobile
+        )
+
+        EriaApplication.getPrefs().setBEARER_TOKEN(
+            this@OtpActivity,
+            otpVerifyResponse.data?.token
         )
 
         EriaApplication.getPrefs().setUserId(
@@ -312,6 +323,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
         AppData.ACCESS_TOKEN =
             otpVerifyResponse?.data?.token!!
     }
+
     private fun moveToLocation() {
         var intent = Intent(this@OtpActivity, LocationActivity::class.java)
         overridePendingTransition(R.anim.popup_in_anim, R.anim.popup_out_anim)
@@ -320,8 +332,8 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
         finish()
+        super.onBackPressed()
     }
 
 }
