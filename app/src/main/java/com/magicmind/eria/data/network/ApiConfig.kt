@@ -23,6 +23,8 @@ interface ApiConfig {
         //Api
         const val API_LOGIN = "otp"
         const val API_REGISTER = "register"
+        const val API_SLIDER = "sliders"
+        const val API_RESTAURANTS = "restaurants"
         const val API_FORGOT_PASSWORD = "forgetpassword"
         const val API_VERIFY_OTP = "login"
         const val API_LOGOUT = "logout"

@@ -2,21 +2,26 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-<androidx.constraintlayout.widget.ConstraintLayout
+
+    <data>
+        <variable
+            name="slider"
+            type="com.magicmind.eria.ui.viewModel.Slider" />
+    </data>
+<LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".ui.fragment.ViewPagerFragment">
 
     <ImageView
         android:id="@+id/on_boarding_image"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_200sdp"
-        android:layout_weight="0.4"
-        android:foreground="@drawable/fade_bottom_effect"
-        android:scaleType="centerCrop"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_4sdp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
 </layout>

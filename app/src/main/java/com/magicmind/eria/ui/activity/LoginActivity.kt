@@ -8,10 +8,10 @@ import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.*
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.magicmind.eria.R
 import com.magicmind.eria.app.EriaApplication
@@ -20,6 +20,7 @@ import com.magicmind.eria.data.model.response.LoginResponse
 import com.magicmind.eria.data.network.ApiCallback
 import com.magicmind.eria.databinding.ActivityLoginBinding
 import com.magicmind.eria.ui.base.BaseActivity
+import java.util.regex.Pattern
 
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
@@ -118,11 +119,23 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     }
 
+    private fun isValidMobile(phone: String): Boolean {
+        return if (!Pattern.matches("[a-zA-Z]+", phone)) {
+            phone.length in 6..15
+        } else false
+    }
     private fun validateInput() {
         with(binding) {
 
             when {
                 TextUtils.isEmpty(binding.etPhoneNumber.text.toString()) -> {
+                    binding.etPhoneNumber.error = getString(R.string.error_phone)
+                    binding.etPhoneNumber.isFocusable = true
+                    binding.etPhoneNumber.isFocusableInTouchMode = true
+                    binding.etPhoneNumber.requestFocus()
+                    return
+                }
+                isValidMobile(binding.etPhoneNumber.text.toString())->{
                     binding.etPhoneNumber.error = getString(R.string.error_phone)
                     binding.etPhoneNumber.isFocusable = true
                     binding.etPhoneNumber.isFocusableInTouchMode = true
@@ -162,11 +175,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         this@LoginActivity,
                         loginResponse.data?.mobile_no
                     )
-                    Log.e("ggg123",  EriaApplication.appPrefs.getMobile_no(this@LoginActivity)!!)
-                    Toast.makeText(this@LoginActivity,  EriaApplication.getPrefs().getMobile_no(this@LoginActivity), Toast.LENGTH_SHORT).show()
+                    Log.e("ggg123", EriaApplication.appPrefs.getMobile_no(this@LoginActivity)!!)
+                    Toast.makeText(
+                        this@LoginActivity,
+                        EriaApplication.getPrefs().getMobile_no(this@LoginActivity),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     moveToOtp()
-                }else{
-                    Toast.makeText(this@LoginActivity, loginResponse?.message, Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this@LoginActivity, loginResponse?.message, Toast.LENGTH_LONG)
+                        .show()
                 }
 
             }

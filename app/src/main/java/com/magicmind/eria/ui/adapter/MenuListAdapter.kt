@@ -10,13 +10,12 @@ import com.magicmind.eria.data.model.response.MenuList
 import com.magicmind.eria.databinding.FragmentMenuListBinding
 import com.magicmind.eria.ui.Interface.onMenuItemAdd
 import com.magicmind.eria.ui.base.HomeBaseActivity
-import com.magicmind.eria.ui.fragment.MenuListFragment
 import com.magicmind.eria.viewholder.MenuListViewHolder
 
 class MenuListAdapter(
     private val _context: HomeBaseActivity,
     var binding1: FragmentMenuListBinding,
-    _menuListdata: List<MenuList?>?
+    _menuListdata: List<MenuList?>?, _onItemAddedListener: onMenuItemAdd?
 ) :
     RecyclerView.Adapter<MenuListViewHolder>() {
 
@@ -24,7 +23,7 @@ class MenuListAdapter(
     var binding: FragmentMenuListBinding= binding1
     private var _menuListdata: List<MenuList>? = _menuListdata as List<MenuList>?
 
-  //  private var _onItemAddedListener: onMenuItemAdd? = _onItemAddedListener
+    private var _onItemAddedListener: onMenuItemAdd? = _onItemAddedListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuListViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val listItem =
@@ -40,17 +39,19 @@ class MenuListAdapter(
             binding.viewModel!!.count.value= binding.viewModel!!.count.value?.plus(1)
             binding.viewModel!!.menuItem.value=_menuListdata!![position]
             if (holder.llMenuAdd.visibility==View.GONE){
+                binding.viewModel!!.individualItemcount.value=binding.viewModel!!.individualItemcount.value?.plus(1)
                 holder.llMenuAdd.visibility=View.VISIBLE
                 holder.btnAdd.visibility=View.GONE
                 holder.ItemQuantityCount=1
                 holder.tvItemQuantity.text = holder.ItemQuantityCount.toString()
-               // _onItemAddedListener?.onItemAdded(true,binding.viewModel!!.count.value)
+                _onItemAddedListener?.onItemAdded(true,binding.viewModel!!.individualItemcount.value)
             }else{
+                binding.viewModel!!.individualItemcount.value=binding.viewModel!!.individualItemcount.value?.minus(1)
                 holder.btnAdd.visibility=View.VISIBLE
                 holder.llMenuAdd.visibility=View.GONE
                 holder.ItemQuantityCount=0
                 holder.tvItemQuantity.text =  holder.ItemQuantityCount.toString()
-                //_onItemAddedListener?.onItemAdded(false,binding.viewModel!!.count.value)
+                _onItemAddedListener?.onItemAdded(false,binding.viewModel!!.individualItemcount.value)
             }
         })
         holder.ivAddItem.setOnClickListener(View.OnClickListener {

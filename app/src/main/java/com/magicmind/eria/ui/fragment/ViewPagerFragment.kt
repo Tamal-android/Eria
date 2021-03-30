@@ -39,7 +39,7 @@ class ViewPagerFragment : Fragment() {
         val position = requireArguments().getInt(ARG_POSITION)
         val onBoardingImages = getOnBoardAssetsLocation()
         with(binding) {
-            onBoardingImage.setImageFromRaw(onBoardingImages[position])
+           // onBoardingImage.setImageFromRaw(onBoardingImages[position])
         }
     }
 
