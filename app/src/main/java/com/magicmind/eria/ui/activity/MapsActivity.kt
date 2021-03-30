@@ -152,8 +152,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback,
         mapView = mapFragment.view;
         mapFragment.getMapAsync(this)
         configureCameraIdle()
-        etTagOther.setOnClickListener(View.OnClickListener {
-        })
         etTagOther.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent): Boolean {
                 val DRAWABLE_LEFT = 0
